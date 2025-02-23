@@ -19,6 +19,10 @@ export class RoomService {
 	async getById(roomId: string) {
 		return this.roomModel.find({ _id: roomId }).exec();
 	}
+	// Че тут по возвращаемому типу не ясно
+	async getAll() {
+		return this.roomModel.find().exec();
+	}
 
 	async update(
 		roomId: string,

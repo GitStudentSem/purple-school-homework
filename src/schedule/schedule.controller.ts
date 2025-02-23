@@ -27,6 +27,11 @@ export class ScheduleController {
 		return this.scheduleService.getById(roomId);
 	}
 
+	@Get()
+	async getAll() {
+		return this.scheduleService.getAll();
+	}
+
 	@Patch("/:roomId")
 	async update(@Param("roomId") roomId: string, @Body() date: Date) {
 		return this.scheduleService.update(roomId, date);

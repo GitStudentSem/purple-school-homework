@@ -20,6 +20,10 @@ export class ScheduleService {
 		return this.schedulewModel.find({ _id: roomId }).exec();
 	}
 
+	async getAll() {
+		return this.schedulewModel.find().exec();
+	}
+
 	async update(roomId: string, date: Date) {
 		return this.schedulewModel
 			.findByIdAndUpdate(roomId, date, { new: true })

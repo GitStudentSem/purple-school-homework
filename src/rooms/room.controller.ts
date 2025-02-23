@@ -28,6 +28,11 @@ export class RoomsController {
 		return this.roomService.getById(roomId);
 	}
 
+	@Get()
+	async getAll() {
+		return this.roomService.getAll();
+	}
+
 	@Patch("/:roomId")
 	async update(@Param("roomId") roomId: string, @Body() dto: UpdateRoomDto) {
 		return this.roomService.update(roomId, dto);
