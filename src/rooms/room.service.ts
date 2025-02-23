@@ -15,6 +15,7 @@ export class RoomService {
 		return this.roomModel.create(dto);
 	}
 
+	// Че тут по возвращаемому типу не ясно
 	async getById(roomId: string) {
 		return this.roomModel.find({ _id: roomId }).exec();
 	}
