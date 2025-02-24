@@ -15,12 +15,11 @@ export class ScheduleService {
 		return this.schedulewModel.create(dto);
 	}
 
-	// Че тут по возвращаемому типу не ясно
-	async getById(roomId: string) {
-		return this.schedulewModel.find({ _id: roomId }).exec();
+	async getById(roomId: string): Promise<ScheduleDocument | null> {
+		return this.schedulewModel.findOne({ _id: roomId }).exec();
 	}
 
-	async getAll() {
+	async getAll(): Promise<ScheduleDocument[] | null> {
 		return this.schedulewModel.find().exec();
 	}
 

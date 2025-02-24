@@ -15,12 +15,11 @@ export class RoomService {
 		return this.roomModel.create(dto);
 	}
 
-	// Че тут по возвращаемому типу не ясно
-	async getById(roomId: string) {
-		return this.roomModel.find({ _id: roomId }).exec();
+	async getById(roomId: string): Promise<RoomDocument | null> {
+		return this.roomModel.findOne({ _id: roomId }).exec();
 	}
-	// Че тут по возвращаемому типу не ясно
-	async getAll() {
+
+	async getAll(): Promise<RoomDocument[] | null> {
 		return this.roomModel.find().exec();
 	}
 
