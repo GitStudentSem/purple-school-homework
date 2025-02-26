@@ -1,18 +1,18 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Schema as MSchema } from "mongoose";
 
-export type RoomDocument = HydratedDocument<RoomModel>;
+export type RoomDocument = HydratedDocument<Room>;
 
-Schema({ _id: true, timestamps: true });
-export class RoomModel {
+@Schema({ _id: true, timestamps: true })
+export class Room {
 	@Prop()
 	roomNumber: number;
 
 	@Prop()
-	sleepingPlacecCount: number;
+	sleepingPlacesCount: number;
 
 	@Prop()
 	isSeavView: boolean;
 }
 
-export const RoomSchema = SchemaFactory.createForClass(RoomModel);
+export const RoomSchema = SchemaFactory.createForClass(Room);

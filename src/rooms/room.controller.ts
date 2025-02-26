@@ -25,7 +25,16 @@ export class RoomsController {
 
 	@Get("/:roomId")
 	async getById(@Param("roomId") roomId: string) {
-		return this.roomService.getById(roomId);
+		const foundedRoom = await this.roomService.getById(roomId);
+		/**
+		 * Вот эта проверка везде повторяется,
+		 * но я не уверен куда бы ее можно было вынести по правильному,
+		 * пока что оставлю так
+		 */
+		if (!foundedRoom) {
+			throw new HttpException(ROOM_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+		return foundedRoom;
 	}
 
 	@Get()
@@ -35,14 +44,20 @@ export class RoomsController {
 
 	@Patch("/:roomId")
 	async update(@Param("roomId") roomId: string, @Body() dto: UpdateRoomDto) {
-		return this.roomService.update(roomId, dto);
+		const foundedRoom = await this.roomService.update(roomId, dto);
+		if (!foundedRoom) {
+			throw new HttpException(ROOM_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+		return foundedRoom;
 	}
 
 	@Delete(":roomId")
 	async delete(@Param("roomId") roomId: string) {
-		const deletedRoom = this.roomService.delete(roomId);
+		const deletedRoom = await this.roomService.delete(roomId);
+
 		if (!deletedRoom) {
 			throw new HttpException(ROOM_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
+		return deletedRoom;
 	}
 }

@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { ScheduleService } from "./schedule.service";
 import { ScheduleController } from "./schedule.controller";
 import { MongooseModule } from "@nestjs/mongoose";
-import { ScheduleModel, ScheduleSchema } from "./schedule.model";
+import { Schedule, ScheduleSchema } from "./schedule.model";
 
 @Module({
 	providers: [ScheduleService],
@@ -10,7 +10,7 @@ import { ScheduleModel, ScheduleSchema } from "./schedule.model";
 	imports: [
 		MongooseModule.forFeature([
 			{
-				name: ScheduleModel.name, // Имя коллекции в MongoDB (будет использовано для модели)
+				name: Schedule.name, // Имя коллекции в MongoDB (будет использовано для модели)
 				schema: ScheduleSchema, // Схема, определенная через @nestjs/mongoose
 			},
 		]),

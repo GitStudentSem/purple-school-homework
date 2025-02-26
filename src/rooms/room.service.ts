@@ -1,15 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { RoomDocument, RoomModel } from "./room.model";
+import { RoomDocument, Room } from "./room.model";
 import { Model, Types } from "mongoose";
 import { CreateRoomDto } from "./dto/CreateRoom.dto";
 import { UpdateRoomDto } from "./dto/UpdateRoom.dto";
 
 @Injectable()
 export class RoomService {
-	constructor(
-		@InjectModel(RoomModel.name) private roomModel: Model<RoomDocument>,
-	) {}
+	constructor(@InjectModel(Room.name) private roomModel: Model<RoomDocument>) {}
 
 	async create(dto: CreateRoomDto): Promise<RoomDocument> {
 		return this.roomModel.create(dto);

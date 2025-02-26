@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { RoomsController } from "./room.controller";
 import { MongooseModule } from "@nestjs/mongoose";
-import { RoomModel, RoomSchema } from "./room.model";
+import { Room, RoomSchema } from "./room.model";
 import { RoomService } from "./room.service";
 
 @Module({
@@ -9,7 +9,7 @@ import { RoomService } from "./room.service";
 	imports: [
 		MongooseModule.forFeature([
 			{
-				name: RoomModel.name, // Имя коллекции в MongoDB (будет использовано для модели)
+				name: Room.name, // Имя коллекции в MongoDB (будет использовано для модели)
 				schema: RoomSchema, // Схема, определенная через @nestjs/mongoose
 			},
 		]),

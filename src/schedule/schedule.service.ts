@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { ScheduleDocument, ScheduleModel } from "./schedule.model";
+import { ScheduleDocument, Schedule } from "./schedule.model";
 import { Model } from "mongoose";
 import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
 
 @Injectable()
 export class ScheduleService {
 	constructor(
-		@InjectModel(ScheduleModel.name)
+		@InjectModel(Schedule.name)
 		private schedulewModel: Model<ScheduleDocument>,
 	) {}
 
