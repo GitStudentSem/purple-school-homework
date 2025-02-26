@@ -1,4 +1,4 @@
 export class CreateScheduleDto {
 	roomId: string;
-	date: Date;
+	reservedDay: Date;
 }

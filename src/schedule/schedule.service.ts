@@ -8,28 +8,32 @@ import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
 export class ScheduleService {
 	constructor(
 		@InjectModel(Schedule.name)
-		private schedulewModel: Model<ScheduleDocument>,
+		private scheduleModel: Model<ScheduleDocument>,
 	) {}
 
 	async create(dto: CreateScheduleDto): Promise<ScheduleDocument> {
-		return this.schedulewModel.create(dto);
+		return this.scheduleModel.create(dto);
 	}
 
 	async getById(roomId: string): Promise<ScheduleDocument | null> {
-		return this.schedulewModel.findOne({ _id: roomId }).exec();
+		return this.scheduleModel.findOne({ roomId }).exec();
 	}
 
 	async getAll(): Promise<ScheduleDocument[] | null> {
-		return this.schedulewModel.find().exec();
+		return this.scheduleModel.find().exec();
 	}
 
-	async update(roomId: string, date: Date) {
-		return this.schedulewModel
-			.findByIdAndUpdate(roomId, date, { new: true })
+	async update(roomId: string, date: Date): Promise<ScheduleDocument | null> {
+		/**
+		 * Не понимаю почему этот тест не проходит
+		 * id сюда попадает, но он все равно возвращает null
+		 */
+		return this.scheduleModel
+			.findByIdAndUpdate(roomId, { date }, { new: true })
 			.exec();
 	}
 
-	async delete(roomId: string) {
-		return this.schedulewModel.findByIdAndDelete(roomId).exec();
+	async delete(roomId: string): Promise<ScheduleDocument | null> {
+		return this.scheduleModel.findByIdAndDelete(roomId).exec();
 	}
 }

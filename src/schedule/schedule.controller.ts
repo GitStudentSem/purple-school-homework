@@ -24,7 +24,12 @@ export class ScheduleController {
 
 	@Get("/:roomId")
 	async getById(@Param("roomId") roomId: string) {
-		return this.scheduleService.getById(roomId);
+		const foundedSchedule = await this.scheduleService.getById(roomId);
+
+		if (!foundedSchedule) {
+			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+		return foundedSchedule;
 	}
 
 	@Get()
@@ -34,14 +39,19 @@ export class ScheduleController {
 
 	@Patch("/:roomId")
 	async update(@Param("roomId") roomId: string, @Body() date: Date) {
-		return this.scheduleService.update(roomId, date);
+		const updatedSchedule = await this.scheduleService.update(roomId, date);
+		if (!updatedSchedule) {
+			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+		return updatedSchedule;
 	}
 
 	@Delete(":roomId")
 	async delete(@Param("roomId") roomId: string) {
-		const deletedSchedule = this.scheduleService.delete(roomId);
+		const deletedSchedule = await this.scheduleService.delete(roomId);
 		if (!deletedSchedule) {
 			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
+		return deletedSchedule;
 	}
 }
