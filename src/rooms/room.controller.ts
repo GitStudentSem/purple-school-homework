@@ -26,6 +26,9 @@ export class RoomsController {
 		return this.roomService.create(dto);
 	}
 
+	/**
+	 * Нужно ли писать валидацию для параметров урла?
+	 */
 	// @UsePipes(new ValidationPipe())
 	@Get("/:roomId")
 	async getById(@Param("roomId") roomId: string) {
@@ -46,7 +49,7 @@ export class RoomsController {
 		return this.roomService.getAll();
 	}
 
-	// @UsePipes(new ValidationPipe())
+	@UsePipes(new ValidationPipe())
 	@Patch("/:roomId")
 	async update(@Param("roomId") roomId: string, @Body() dto: UpdateRoomDto) {
 		const foundedRoom = await this.roomService.update(roomId, dto);

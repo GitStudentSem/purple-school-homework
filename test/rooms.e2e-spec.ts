@@ -32,6 +32,7 @@ describe("RoomController (e2e)", () => {
 		await app.init();
 	});
 
+	// described
 	describe("/rooms/create (POST)", () => {
 		const route = "/rooms/create";
 		it("success", async () => {
@@ -102,7 +103,6 @@ describe("RoomController (e2e)", () => {
 				.send({ ...testRoomDto, isSeavView: 0 })
 				.expect(400)
 				.then(({ body }: request.Response) => {
-					console.log("body", body);
 					expect(body.message[0]).toBe(INVALID_SEA_VIEW);
 				});
 		});
@@ -153,7 +153,7 @@ describe("RoomController (e2e)", () => {
 
 	describe("/rooms/:roomId (PATCH)", () => {
 		it("success", async () => {
-			const updatedSleepingPlacesCount = 367;
+			const updatedSleepingPlacesCount = 5;
 
 			return request(app.getHttpServer())
 				.patch(`/rooms/${createdRoomId}`)
@@ -166,7 +166,7 @@ describe("RoomController (e2e)", () => {
 					/**
 					 * В этом тесте я не уверен, мб есть способ получше
 					 * проверить сам объект и наличие полей в нем, но пока
-					 * что оставлю просто _id
+					 * что оставлю просто sleepingPlacesCount
 					 */
 					expect(body.sleepingPlacesCount).toBe(updatedSleepingPlacesCount);
 					return;
@@ -176,8 +176,69 @@ describe("RoomController (e2e)", () => {
 		it("incorrect id", async () => {
 			const randomRoomId = new Types.ObjectId().toHexString();
 			return request(app.getHttpServer())
-				.get(`/rooms/${randomRoomId}`)
+				.patch(`/rooms/${randomRoomId}`)
+				.send(testRoomDto)
 				.expect(404, { statusCode: 404, message: ROOM_NOT_FOUND });
+		});
+
+		it("roomNumber is less than 1", async () => {
+			return request(app.getHttpServer())
+				.patch(`/rooms/${createdRoomId}`)
+				.send({ ...testRoomDto, roomNumber: 0 })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_ROOM_NUMBER);
+				});
+		});
+
+		it("roomNumber is a string", async () => {
+			return request(app.getHttpServer())
+				.patch(`/rooms/${createdRoomId}`)
+				.send({ ...testRoomDto, roomNumber: "asd" })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_ROOM_NUMBER);
+				});
+		});
+
+		it("sleepingPlacesCount is less than 1", async () => {
+			return request(app.getHttpServer())
+				.patch(`/rooms/${createdRoomId}`)
+				.send({ ...testRoomDto, sleepingPlacesCount: 0 })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_SLEEPING_PLACES);
+				});
+		});
+
+		it("sleepingPlacesCount is more than 6", async () => {
+			return request(app.getHttpServer())
+				.patch(`/rooms/${createdRoomId}`)
+				.send({ ...testRoomDto, sleepingPlacesCount: 7 })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_SLEEPING_PLACES);
+				});
+		});
+
+		it("sleepingPlacesCount is a string", async () => {
+			return request(app.getHttpServer())
+				.patch(`/rooms/${createdRoomId}`)
+				.send({ ...testRoomDto, sleepingPlacesCount: "asd" })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_SLEEPING_PLACES);
+				});
+		});
+
+		it("isSeavView must be boolean", async () => {
+			return request(app.getHttpServer())
+				.patch(`/rooms/${createdRoomId}`)
+				.send({ ...testRoomDto, isSeavView: 0 })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_SEA_VIEW);
+				});
 		});
 	});
 

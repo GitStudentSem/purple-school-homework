@@ -7,7 +7,6 @@ export const INVALID_SLEEPING_PLACES =
 
 export const IS_SEA_VIEW_MIST_BE_BOOLEAN =
 	"Вид на море должен быть в булевом формате";
-//////////////////////
 
 export const INVALID_SEA_VIEW =
 	"Вид на море должен быть указан как 'да' или 'нет'";
