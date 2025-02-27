@@ -30,8 +30,10 @@ export class ScheduleService {
 		 */
 		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
 
+		if (!foundedSchedule) return null;
+
 		return this.scheduleModel
-			.findByIdAndUpdate(foundedSchedule?._id, { roomId, date }, { new: true })
+			.findByIdAndUpdate(foundedSchedule._id, { roomId, date }, { new: true })
 			.exec();
 	}
 
@@ -41,6 +43,7 @@ export class ScheduleService {
 		 * Сначала найти расписание, а потом удалить его по этому id
 		 */
 		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
-		return this.scheduleModel.findByIdAndDelete(foundedSchedule?._id).exec();
+		if (!foundedSchedule) return null;
+		return this.scheduleModel.findByIdAndDelete(foundedSchedule._id).exec();
 	}
 }

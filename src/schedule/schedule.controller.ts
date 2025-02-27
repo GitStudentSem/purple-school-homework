@@ -19,7 +19,7 @@ import { SCHEDULE_NOT_FOUND } from "./scheduleConstants";
 export class ScheduleController {
 	constructor(private readonly scheduleService: ScheduleService) {}
 
-	// @UsePipes(new ValidationPipe())
+	@UsePipes(new ValidationPipe())
 	@Post("create")
 	async create(@Body() dto: CreateScheduleDto) {
 		return this.scheduleService.create(dto);
@@ -41,7 +41,7 @@ export class ScheduleController {
 		return this.scheduleService.getAll();
 	}
 
-	// @UsePipes(new ValidationPipe())
+	@UsePipes(new ValidationPipe())
 	@Patch("/:roomId")
 	async update(@Param("roomId") roomId: string, @Body() date: Date) {
 		const updatedSchedule = await this.scheduleService.update(roomId, date);

@@ -6,7 +6,11 @@ import { AppModule } from "../src/app.module";
 
 import { disconnect, Types } from "mongoose";
 import { CreateScheduleDto } from "src/schedule/dto/CreateSchedule.dto";
-import { SCHEDULE_NOT_FOUND } from "../src/schedule/scheduleConstants";
+import {
+	INCORRECT_DATE,
+	INCORRECT_ROOM_ID,
+	SCHEDULE_NOT_FOUND,
+} from "../src/schedule/scheduleConstants";
 import { CreateRoomDto } from "src/rooms/dto/CreateRoom.dto";
 
 const testScheduleDto: CreateScheduleDto = {
@@ -52,6 +56,17 @@ describe("ScheduleController (e2e)", () => {
 		it("success", async () => {
 			return request(app.getHttpServer())
 				.post("/schedule/create")
+				.send({ reservedDay: new Date() })
+				.expect(201)
+				.then(({ body }: request.Response) => {
+					expect(body._id).toBeDefined();
+					return;
+				});
+		});
+
+		it("ППП", async () => {
+			return request(app.getHttpServer())
+				.post("/schedule/create")
 				.send(testScheduleDto)
 				.expect(201)
 				.then(({ body }: request.Response) => {
@@ -59,6 +74,33 @@ describe("ScheduleController (e2e)", () => {
 					return;
 				});
 		});
+
+		it("incorrect room id type", async () => {
+			return request(app.getHttpServer())
+				.post("/schedule/create")
+				.send({ ...testScheduleDto, roomId: 0 })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INCORRECT_ROOM_ID);
+					return;
+				});
+		});
+
+		/**
+		 *! Че делать с этим тестом пока не догоняю
+		 * он пропускает даже null
+		 */
+
+		// it("incorrect reserved day type", async () => {
+		// 	return request(app.getHttpServer())
+		// 		.post("/schedule/create")
+		// 		.send({ ...testScheduleDto, reservedDay: null })
+		// 		.expect(400)
+		// 		.then(({ body }: request.Response) => {
+		// 			expect(body.message[0]).toBe(INCORRECT_DATE);
+		// 			return;
+		// 		});
+		// });
 	});
 
 	describe("/schedule/:roomId (GET)", () => {
