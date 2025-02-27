@@ -8,6 +8,8 @@ import {
 	Param,
 	Patch,
 	Post,
+	UsePipes,
+	ValidationPipe,
 } from "@nestjs/common";
 import { ScheduleService } from "./schedule.service";
 import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
@@ -17,11 +19,13 @@ import { SCHEDULE_NOT_FOUND } from "./scheduleConstants";
 export class ScheduleController {
 	constructor(private readonly scheduleService: ScheduleService) {}
 
+	// @UsePipes(new ValidationPipe())
 	@Post("create")
 	async create(@Body() dto: CreateScheduleDto) {
 		return this.scheduleService.create(dto);
 	}
 
+	// @UsePipes(new ValidationPipe())
 	@Get("/:roomId")
 	async getById(@Param("roomId") roomId: string) {
 		const foundedSchedule = await this.scheduleService.getById(roomId);
@@ -37,6 +41,7 @@ export class ScheduleController {
 		return this.scheduleService.getAll();
 	}
 
+	// @UsePipes(new ValidationPipe())
 	@Patch("/:roomId")
 	async update(@Param("roomId") roomId: string, @Body() date: Date) {
 		const updatedSchedule = await this.scheduleService.update(roomId, date);
@@ -46,6 +51,7 @@ export class ScheduleController {
 		return updatedSchedule;
 	}
 
+	// @UsePipes(new ValidationPipe())
 	@Delete(":roomId")
 	async delete(@Param("roomId") roomId: string) {
 		const deletedSchedule = await this.scheduleService.delete(roomId);

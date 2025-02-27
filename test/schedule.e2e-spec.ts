@@ -127,6 +127,14 @@ describe("ScheduleController (e2e)", () => {
 		});
 	});
 
+	describe("/rooms/:roomId (DELETE)", () => {
+		it("success", () => {
+			return request(app.getHttpServer())
+				.delete(`/rooms/${testScheduleDto.roomId}`)
+				.expect(200);
+		});
+	});
+
 	afterAll(() => {
 		disconnect();
 	});

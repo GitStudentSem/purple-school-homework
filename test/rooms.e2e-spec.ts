@@ -6,7 +6,12 @@ import { AppModule } from "../src/app.module";
 
 import { disconnect, Types } from "mongoose";
 import { CreateRoomDto } from "src/rooms/dto/CreateRoom.dto";
-import { ROOM_NOT_FOUND } from "../src/rooms/roomConstants";
+import {
+	INVALID_ROOM_NUMBER,
+	ROOM_NOT_FOUND,
+	INVALID_SLEEPING_PLACES,
+	INVALID_SEA_VIEW,
+} from "../src/rooms/roomConstants";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
@@ -28,15 +33,77 @@ describe("RoomController (e2e)", () => {
 	});
 
 	describe("/rooms/create (POST)", () => {
+		const route = "/rooms/create";
 		it("success", async () => {
 			return request(app.getHttpServer())
-				.post("/rooms/create")
+				.post(route)
 				.send(testRoomDto)
 				.expect(201)
 				.then(({ body }: request.Response) => {
 					createdRoomId = body._id;
 					expect(createdRoomId).toBeDefined();
 					return;
+				});
+		});
+
+		it("roomNumber is less than 1", async () => {
+			return request(app.getHttpServer())
+				.post(route)
+				.send({ ...testRoomDto, roomNumber: 0 })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_ROOM_NUMBER);
+				});
+		});
+
+		it("roomNumber is a string", async () => {
+			return request(app.getHttpServer())
+				.post(route)
+				.send({ ...testRoomDto, roomNumber: "asd" })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_ROOM_NUMBER);
+				});
+		});
+
+		it("sleepingPlacesCount is less than 1", async () => {
+			return request(app.getHttpServer())
+				.post(route)
+				.send({ ...testRoomDto, sleepingPlacesCount: 0 })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_SLEEPING_PLACES);
+				});
+		});
+
+		it("sleepingPlacesCount is more than 6", async () => {
+			return request(app.getHttpServer())
+				.post(route)
+				.send({ ...testRoomDto, sleepingPlacesCount: 7 })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_SLEEPING_PLACES);
+				});
+		});
+
+		it("sleepingPlacesCount is a string", async () => {
+			return request(app.getHttpServer())
+				.post(route)
+				.send({ ...testRoomDto, sleepingPlacesCount: "asd" })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					expect(body.message[0]).toBe(INVALID_SLEEPING_PLACES);
+				});
+		});
+
+		it("isSeavView must be boolean", async () => {
+			return request(app.getHttpServer())
+				.post(route)
+				.send({ ...testRoomDto, isSeavView: 0 })
+				.expect(400)
+				.then(({ body }: request.Response) => {
+					console.log("body", body);
+					expect(body.message[0]).toBe(INVALID_SEA_VIEW);
 				});
 		});
 	});
