@@ -29,7 +29,6 @@ export class ScheduleController {
 	@Get("/:roomId")
 	async getById(@Param("roomId") roomId: string) {
 		const foundedSchedule = await this.scheduleService.getById(roomId);
-
 		if (!foundedSchedule) {
 			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}

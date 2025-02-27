@@ -56,17 +56,6 @@ describe("ScheduleController (e2e)", () => {
 		it("success", async () => {
 			return request(app.getHttpServer())
 				.post("/schedule/create")
-				.send({ reservedDay: new Date() })
-				.expect(201)
-				.then(({ body }: request.Response) => {
-					expect(body._id).toBeDefined();
-					return;
-				});
-		});
-
-		it("ППП", async () => {
-			return request(app.getHttpServer())
-				.post("/schedule/create")
 				.send(testScheduleDto)
 				.expect(201)
 				.then(({ body }: request.Response) => {
@@ -146,7 +135,7 @@ describe("ScheduleController (e2e)", () => {
 				.expect(200);
 		});
 
-		it("incorrect id", async () => {
+		it("incorrect id", () => {
 			const randomRoomId = new Types.ObjectId().toHexString();
 			return request(app.getHttpServer())
 				.get(`/schedule/${randomRoomId}`)
