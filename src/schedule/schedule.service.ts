@@ -25,15 +25,22 @@ export class ScheduleService {
 
 	async update(roomId: string, date: Date): Promise<ScheduleDocument | null> {
 		/**
-		 * Не понимаю почему этот тест не проходит
-		 * id сюда попадает, но он все равно возвращает null
+		 * Я не уверен в том что это правильный подход
+		 * Сначала найти расписание, а потом удалить его по этому id
 		 */
+		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
+
 		return this.scheduleModel
-			.findByIdAndUpdate(roomId, { date }, { new: true })
+			.findByIdAndUpdate(foundedSchedule?._id, { roomId, date }, { new: true })
 			.exec();
 	}
 
 	async delete(roomId: string): Promise<ScheduleDocument | null> {
-		return this.scheduleModel.findByIdAndDelete(roomId).exec();
+		/**
+		 * Я не уверен в том что это правильный подход
+		 * Сначала найти расписание, а потом удалить его по этому id
+		 */
+		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
+		return this.scheduleModel.findByIdAndDelete(foundedSchedule?._id).exec();
 	}
 }
