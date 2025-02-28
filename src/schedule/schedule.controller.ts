@@ -28,11 +28,7 @@ export class ScheduleController {
 	// @UsePipes(new ValidationPipe())
 	@Get("/:roomId")
 	async getById(@Param("roomId") roomId: string) {
-		const foundedSchedule = await this.scheduleService.getById(roomId);
-		if (!foundedSchedule) {
-			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
-		return foundedSchedule;
+		return this.scheduleService.getById(roomId);
 	}
 
 	@Get()
@@ -43,20 +39,12 @@ export class ScheduleController {
 	@UsePipes(new ValidationPipe())
 	@Patch("/:roomId")
 	async update(@Param("roomId") roomId: string, @Body() date: Date) {
-		const updatedSchedule = await this.scheduleService.update(roomId, date);
-		if (!updatedSchedule) {
-			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
-		return updatedSchedule;
+		return this.scheduleService.update(roomId, date);
 	}
 
 	// @UsePipes(new ValidationPipe())
 	@Delete(":roomId")
 	async delete(@Param("roomId") roomId: string) {
-		const deletedSchedule = await this.scheduleService.delete(roomId);
-		if (!deletedSchedule) {
-			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
-		return deletedSchedule;
+		return this.scheduleService.delete(roomId);
 	}
 }

@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { ScheduleDocument, Schedule } from "./schedule.model";
 import { Model } from "mongoose";
 import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
+import { SCHEDULE_NOT_FOUND } from "./scheduleConstants";
 
 @Injectable()
 export class ScheduleService {
@@ -16,7 +17,11 @@ export class ScheduleService {
 	}
 
 	async getById(roomId: string): Promise<ScheduleDocument | null> {
-		return this.scheduleModel.findOne({ roomId }).exec();
+		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
+		if (!foundedSchedule) {
+			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+		return foundedSchedule;
 	}
 
 	async getAll(): Promise<ScheduleDocument[] | null> {
@@ -24,13 +29,11 @@ export class ScheduleService {
 	}
 
 	async update(roomId: string, date: Date): Promise<ScheduleDocument | null> {
-		/**
-		 * Я не уверен в том что это правильный подход
-		 * Сначала найти расписание, а потом удалить его по этому id
-		 */
 		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
 
-		if (!foundedSchedule) return null;
+		if (!foundedSchedule) {
+			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
 
 		return this.scheduleModel
 			.findByIdAndUpdate(foundedSchedule._id, { roomId, date }, { new: true })
@@ -43,7 +46,9 @@ export class ScheduleService {
 		 * Сначала найти расписание, а потом удалить его по этому id
 		 */
 		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
-		if (!foundedSchedule) return null;
+		if (!foundedSchedule) {
+			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
 		return this.scheduleModel.findByIdAndDelete(foundedSchedule._id).exec();
 	}
 }
