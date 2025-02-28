@@ -12,7 +12,7 @@ export class Room {
 	sleepingPlacesCount: number;
 
 	@Prop()
-	isSeavView: boolean;
+	isSeaView: boolean;
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

@@ -18,5 +18,5 @@ export class UpdateRoomDto {
 	sleepingPlacesCount: number;
 
 	@IsBoolean({ message: INVALID_SEA_VIEW })
-	isSeavView: boolean;
+	isSeaView: boolean;
 }

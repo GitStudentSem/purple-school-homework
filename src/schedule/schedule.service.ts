@@ -41,10 +41,6 @@ export class ScheduleService {
 	}
 
 	async delete(roomId: string): Promise<ScheduleDocument | null> {
-		/**
-		 * Я не уверен в том что это правильный подход
-		 * Сначала найти расписание, а потом удалить его по этому id
-		 */
 		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
 		if (!foundedSchedule) {
 			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);

@@ -4,7 +4,7 @@ import * as request from "supertest";
 import { App } from "supertest/types";
 import { AppModule } from "../src/app.module";
 
-import { disconnect, Types } from "mongoose";
+import { disconnect } from "mongoose";
 import { CreateRoomDto } from "src/rooms/dto/CreateRoom.dto";
 import {
 	INVALID_ROOM_NUMBER,
@@ -12,11 +12,12 @@ import {
 	INVALID_SLEEPING_PLACES,
 	INVALID_SEA_VIEW,
 } from "../src/rooms/roomConstants";
+import { getRandomId } from "./tools";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
 	sleepingPlacesCount: 1,
-	isSeavView: false,
+	isSeaView: false,
 };
 
 describe("RoomController (e2e)", () => {
@@ -97,10 +98,10 @@ describe("RoomController (e2e)", () => {
 				});
 		});
 
-		it("isSeavView must be boolean", async () => {
+		it("isSeaView must be boolean", async () => {
 			return request(app.getHttpServer())
 				.post(route)
-				.send({ ...testRoomDto, isSeavView: 0 })
+				.send({ ...testRoomDto, isSeaView: 0 })
 				.expect(400)
 				.then(({ body }: request.Response) => {
 					expect(body.message[0]).toBe(INVALID_SEA_VIEW);
@@ -109,32 +110,25 @@ describe("RoomController (e2e)", () => {
 	});
 
 	describe("/rooms/:roomId (GET)", () => {
-		it("success", async () => {
+		it("should return the correct room details with additional properties", async () => {
 			return request(app.getHttpServer())
 				.get(`/rooms/${createdRoomId}`)
 				.expect(200)
 				.then(({ body }: request.Response) => {
-					/**
-					 * В этом тесте я не уверен, мб есть способ получше
-					 * проверить сам объект и наличие полей в нем, но пока
-					 * что оставлю просто _id
-					 */
-					expect(body._id).toBeDefined();
-					return;
+					expect(body).toEqual(
+						expect.objectContaining({
+							_id: expect.any(String),
+							roomNumber: expect.any(Number),
+							sleepingPlacesCount: expect.any(Number),
+							isSeaView: expect.any(Boolean),
+						}),
+					);
 				});
 		});
 
 		it("incorrect id", async () => {
-			/**
-			 * Не уверен в какую область видимости лучше вынести эту переменную
-			 * - на каждый тест
-			 * - на каждое описание
-			 * - на весь e2e тест глобально как testRoomDto
-			 */
-			const randomRoomId = new Types.ObjectId().toHexString();
-
 			return request(app.getHttpServer())
-				.get(`/rooms/${randomRoomId}`)
+				.get(`/rooms/${getRandomId()}`)
 				.expect(404, { statusCode: 404, message: ROOM_NOT_FOUND });
 		});
 	});
@@ -163,20 +157,20 @@ describe("RoomController (e2e)", () => {
 				})
 				.expect(200)
 				.then(({ body }: request.Response) => {
-					/**
-					 * В этом тесте я не уверен, мб есть способ получше
-					 * проверить сам объект и наличие полей в нем, но пока
-					 * что оставлю просто sleepingPlacesCount
-					 */
-					expect(body.sleepingPlacesCount).toBe(updatedSleepingPlacesCount);
-					return;
+					expect(body).toEqual(
+						expect.objectContaining({
+							_id: expect.any(String),
+							roomNumber: expect.any(Number),
+							sleepingPlacesCount: expect.any(Number),
+							isSeaView: expect.any(Boolean),
+						}),
+					);
 				});
 		});
 
 		it("incorrect id", async () => {
-			const randomRoomId = new Types.ObjectId().toHexString();
 			return request(app.getHttpServer())
-				.patch(`/rooms/${randomRoomId}`)
+				.patch(`/rooms/${getRandomId()}`)
 				.send(testRoomDto)
 				.expect(404, { statusCode: 404, message: ROOM_NOT_FOUND });
 		});
@@ -231,10 +225,10 @@ describe("RoomController (e2e)", () => {
 				});
 		});
 
-		it("isSeavView must be boolean", async () => {
+		it("isSeaView must be boolean", async () => {
 			return request(app.getHttpServer())
 				.patch(`/rooms/${createdRoomId}`)
-				.send({ ...testRoomDto, isSeavView: 0 })
+				.send({ ...testRoomDto, isSeaView: 0 })
 				.expect(400)
 				.then(({ body }: request.Response) => {
 					expect(body.message[0]).toBe(INVALID_SEA_VIEW);
@@ -250,9 +244,8 @@ describe("RoomController (e2e)", () => {
 		});
 
 		it("incorrect id", () => {
-			const randomRoomId = new Types.ObjectId().toHexString();
 			return request(app.getHttpServer())
-				.delete(`/rooms/${randomRoomId}`)
+				.delete(`/rooms/${getRandomId()}`)
 				.expect(404, { statusCode: 404, message: ROOM_NOT_FOUND });
 		});
 	});

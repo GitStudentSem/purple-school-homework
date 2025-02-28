@@ -22,7 +22,7 @@ const testScheduleDto: CreateScheduleDto = {
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
 	sleepingPlacesCount: 1,
-	isSeavView: false,
+	isSeaView: false,
 };
 
 describe("ScheduleController (e2e)", () => {
