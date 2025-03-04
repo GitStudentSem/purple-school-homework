@@ -11,7 +11,6 @@ import {
 	WRONG_PASSWORD_ERROR,
 } from "src/auth/auth.constants";
 import { SetRoleDto } from "./dto/setRole.dto";
-import { emit } from "process";
 
 @Injectable()
 export class UsersService {

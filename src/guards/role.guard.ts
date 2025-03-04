@@ -3,9 +3,11 @@ import {
 	CanActivate,
 	ExecutionContext,
 	UnauthorizedException,
+	ForbiddenException,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { ROLES_KEY } from "src/decorators/roles.decorator";
+import { FORBIDDEN_MESSAGE, UNAUTHORIZED_USER } from "./guards.constants";
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -22,12 +24,12 @@ export class RoleGuard implements CanActivate {
 		const user = request.user; // Пользователь из JwtAuthGuard
 
 		if (!user) {
-			throw new UnauthorizedException("Пользователь не авторизован");
+			throw new UnauthorizedException(UNAUTHORIZED_USER);
 		}
 		const hasRole = () => roles.some((role) => user.role === role);
 
 		if (!hasRole()) {
-			throw new UnauthorizedException("Недостаточно прав для доступа");
+			throw new ForbiddenException(FORBIDDEN_MESSAGE);
 		}
 
 		return true;
