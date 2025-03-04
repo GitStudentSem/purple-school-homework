@@ -13,7 +13,7 @@ import {
 import { RoomService } from "./room.service";
 import { CreateRoomDto } from "./dto/CreateRoom.dto";
 import { UpdateRoomDto } from "./dto/UpdateRoom.dto";
-import { JwtAuthGuard } from "src/auth/guards/jwt.guard";
+import { JwtAuthGuard } from "src/guards/jwt.guard";
 
 @Controller("rooms")
 export class RoomsController {

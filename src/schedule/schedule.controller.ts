@@ -12,7 +12,7 @@ import {
 } from "@nestjs/common";
 import { ScheduleService } from "./schedule.service";
 import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
-import { JwtAuthGuard } from "src/auth/guards/jwt.guard";
+import { JwtAuthGuard } from "src/guards/jwt.guard";
 
 @Controller("schedule")
 export class ScheduleController {

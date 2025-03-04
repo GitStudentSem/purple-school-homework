@@ -1,2 +1,4 @@
-export const INCORRECT_ROLE_VALUE = "Роль должна быть 'user' или 'admin'";
+import { Role } from "src/auth/auth.constants";
+
+export const INCORRECT_ROLE_VALUE = `Роль должна быть '${Role.User}' или '${Role.Admin}'`;
 export const INCORRECT_EMAIL_FORMAT = "Неверный формат почты";

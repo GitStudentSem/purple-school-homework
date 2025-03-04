@@ -6,6 +6,7 @@ import { JwtService } from "@nestjs/jwt";
 import { RegisterDto } from "src/auth/dto/register.dto";
 import { compare, hash } from "bcryptjs";
 import {
+	Role,
 	USER_NOT_FOUND_ERROR,
 	WRONG_PASSWORD_ERROR,
 } from "src/auth/auth.constants";
@@ -19,9 +20,12 @@ export class UsersService {
 		private readonly jwtService: JwtService,
 	) {}
 
-	async findUser(email: string): Promise<UserDocument | null> {
+	async findUser(email: string): Promise<UserDocument> {
 		const foundedUser = await this.userModel.findOne({ email }).exec();
 
+		if (!foundedUser) {
+			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
+		}
 		return foundedUser;
 	}
 
@@ -33,7 +37,7 @@ export class UsersService {
 			phoneNumber: dto.phoneNumber,
 			passwordHash,
 			name: dto.name,
-			role: "user",
+			role: Role.User,
 		});
 		const savedUser = await newUser.save();
 		return savedUser;
@@ -44,9 +48,6 @@ export class UsersService {
 		password: string,
 	): Promise<Pick<User, "email">> {
 		const user = await this.findUser(email);
-		if (!user) {
-			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
-		}
 
 		const isCorrectPassword = await compare(password, user.passwordHash);
 		if (!isCorrectPassword) {
@@ -56,10 +57,8 @@ export class UsersService {
 	}
 
 	async setRole(dto: SetRoleDto): Promise<void> {
-		const user = await this.findUser(dto.email);
-		if (!user) {
-			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
-		}
+		await this.findUser(dto.email);
+
 		await this.userModel.updateOne(
 			{ email: dto.email },
 			{ $set: { role: dto.role } },
