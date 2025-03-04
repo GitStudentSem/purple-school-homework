@@ -1,4 +1,11 @@
-import { BadRequestException, Body, Controller, Post } from "@nestjs/common";
+import {
+	BadRequestException,
+	Body,
+	Controller,
+	Post,
+	UsePipes,
+	ValidationPipe,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
@@ -12,6 +19,7 @@ export class AuthController {
 		private readonly userService: UsersService,
 	) {}
 
+	@UsePipes(new ValidationPipe())
 	@Post("register")
 	async register(@Body() dto: RegisterDto) {
 		const oldUser = await this.userService.findUser(dto.email);
@@ -22,6 +30,7 @@ export class AuthController {
 		return this.userService.createUser(dto);
 	}
 
+	@UsePipes(new ValidationPipe())
 	@Post("login")
 	async login(@Body() dto: LoginDto) {
 		const { email } = await this.userService.validateUser(
