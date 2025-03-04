@@ -4,6 +4,8 @@ import { RoomsModule } from "./rooms/room.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { getMongoConfig } from "./configs/mongo.config";
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
 	imports: [
@@ -15,6 +17,8 @@ import { getMongoConfig } from "./configs/mongo.config";
 		ConfigModule.forRoot(),
 		ScheduleModule,
 		RoomsModule,
+		UsersModule,
+		AuthModule,
 	],
 })
 export class AppModule {}
