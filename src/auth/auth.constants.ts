@@ -9,5 +9,5 @@ export const INCORRECT_PASSWORD_LENGTH =
 	"Пароль должен содержать минимум 6 символов";
 export const INCORRECT_NAME_FORMAT = "Имя должно быть строкой";
 export const INCORRECT_PHONE_NUMBER_FORMAT = "Неверный формат номера телефона";
-export const INCORRECT_ROLE_VALUE = "Роль должна быть 'user' или 'admin'";
+
 export const INCORRECT_NAME_VALUE = "Имя должно быть не менее 2 символов";

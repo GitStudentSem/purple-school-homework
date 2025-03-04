@@ -11,7 +11,7 @@ export class AuthService {
 		private readonly jwtService: JwtService,
 	) {}
 
-	async login(email: string) {
+	async login(email: string): Promise<{ access_token: string }> {
 		const payload = { email };
 		return { access_token: await this.jwtService.signAsync(payload) };
 	}

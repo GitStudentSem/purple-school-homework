@@ -9,6 +9,8 @@ import {
 	USER_NOT_FOUND_ERROR,
 	WRONG_PASSWORD_ERROR,
 } from "src/auth/auth.constants";
+import { SetRoleDto } from "./dto/setRole.dto";
+import { emit } from "process";
 
 @Injectable()
 export class UsersService {
@@ -17,11 +19,13 @@ export class UsersService {
 		private readonly jwtService: JwtService,
 	) {}
 
-	async findUser(email: string) {
-		return this.userModel.findOne({ email }).exec();
+	async findUser(email: string): Promise<UserDocument | null> {
+		const foundedUser = await this.userModel.findOne({ email }).exec();
+
+		return foundedUser;
 	}
 
-	async createUser(dto: RegisterDto) {
+	async createUser(dto: RegisterDto): Promise<UserDocument> {
 		const passwordHash = await hash(dto.password, 10);
 
 		const newUser = new this.userModel({
@@ -29,10 +33,10 @@ export class UsersService {
 			phoneNumber: dto.phoneNumber,
 			passwordHash,
 			name: dto.name,
-			role: dto.role,
+			role: "user",
 		});
-
-		return newUser.save();
+		const savedUser = await newUser.save();
+		return savedUser;
 	}
 
 	async validateUser(
@@ -49,5 +53,27 @@ export class UsersService {
 			throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
 		}
 		return { email: user.email };
+	}
+
+	async setRole(dto: SetRoleDto): Promise<void> {
+		const user = await this.findUser(dto.email);
+		if (!user) {
+			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
+		}
+		await this.userModel.updateOne(
+			{ email: dto.email },
+			{ $set: { role: dto.role } },
+		);
+
+		/**
+		 * Тут не ясно че лучше вернуть
+		 * Можно вернуть 204 как успех
+		 * Можно вернуть новые данные юзера {email, role}
+		 * Но тогда нужно проверить что документ все же был обновлен
+		 *
+		 * А если нет, то видимо выбрасывать ошибку я хз
+		 *
+		 * Пока что оставлю воид и 204
+		 */
 	}
 }

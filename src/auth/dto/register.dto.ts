@@ -11,7 +11,6 @@ import {
 	INCORRECT_NAME_VALUE,
 	INCORRECT_PASSWORD_LENGTH,
 	INCORRECT_PHONE_NUMBER_FORMAT,
-	INCORRECT_ROLE_VALUE,
 } from "../auth.constants";
 
 export class RegisterDto {
@@ -28,8 +27,4 @@ export class RegisterDto {
 
 	@IsPhoneNumber("RU", { message: INCORRECT_PHONE_NUMBER_FORMAT })
 	phoneNumber: string;
-
-	@IsString({ message: INCORRECT_ROLE_VALUE })
-	@IsIn(["user", "admin"], { message: INCORRECT_ROLE_VALUE })
-	role: string;
 }
