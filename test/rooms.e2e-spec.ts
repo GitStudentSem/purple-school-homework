@@ -5,7 +5,7 @@ import { App } from "supertest/types";
 import { AppModule } from "../src/app.module";
 
 import { disconnect } from "mongoose";
-import { CreateRoomDto } from "src/rooms/dto/CreateRoom.dto";
+import { CreateRoomDto } from "../src/rooms/dto/CreateRoom.dto";
 import {
 	INVALID_ROOM_NUMBER,
 	ROOM_NOT_FOUND,

@@ -13,10 +13,10 @@ import {
 import { RoomService } from "./room.service";
 import { CreateRoomDto } from "./dto/CreateRoom.dto";
 import { UpdateRoomDto } from "./dto/UpdateRoom.dto";
-import { JwtAuthGuard } from "src/guards/jwt.guard";
-import { Roles } from "src/decorators/roles.decorator";
-import { Role } from "src/auth/auth.constants";
-import { RoleGuard } from "src/guards/role.guard";
+import { JwtAuthGuard } from "../guards/jwt.guard";
+import { Roles } from "../decorators/roles.decorator";
+import { Role } from "../auth/auth.constants";
+import { RoleGuard } from "../guards/role.guard";
 
 /**
  * Ты про это говорил когда имел в виду что бы я поднял пайпы?

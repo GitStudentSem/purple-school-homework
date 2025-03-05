@@ -9,7 +9,7 @@ import {
 import { AuthService } from "./auth.service";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
-import { UsersService } from "src/users/users.service";
+import { UsersService } from "../users/users.service";
 import { ALREADY_REGISTERED_ERROR } from "./auth.constants";
 
 @Controller("auth")

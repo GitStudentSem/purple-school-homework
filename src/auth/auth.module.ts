@@ -3,12 +3,12 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { getJWTConfig } from "src/configs/jwt.config";
+import { getJWTConfig } from "../configs/jwt.config";
 import { MongooseModule } from "@nestjs/mongoose";
-import { User, UserSchema } from "src/users/users.model";
+import { User, UserSchema } from "../users/users.model";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./strategies/jwt.strategy";
-import { UsersService } from "src/users/users.service";
+import { UsersService } from "../users/users.service";
 
 @Module({
 	controllers: [AuthController],

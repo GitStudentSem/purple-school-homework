@@ -3,13 +3,13 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { User, UserDocument } from "./users.model";
 import { JwtService } from "@nestjs/jwt";
-import { RegisterDto } from "src/auth/dto/register.dto";
+import { RegisterDto } from "../auth/dto/register.dto";
 import { compare, hash } from "bcryptjs";
 import {
 	Role,
 	USER_NOT_FOUND_ERROR,
 	WRONG_PASSWORD_ERROR,
-} from "src/auth/auth.constants";
+} from "../auth/auth.constants";
 import { SetRoleDto } from "./dto/setRole.dto";
 
 @Injectable()

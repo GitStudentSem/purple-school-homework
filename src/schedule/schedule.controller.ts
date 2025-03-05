@@ -12,7 +12,7 @@ import {
 } from "@nestjs/common";
 import { ScheduleService } from "./schedule.service";
 import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
-import { JwtAuthGuard } from "src/guards/jwt.guard";
+import { JwtAuthGuard } from "../guards/jwt.guard";
 
 /**
  * По-моему тут можно и не делать проверку на роль юзера

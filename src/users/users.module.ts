@@ -5,7 +5,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { User, UserSchema } from "./users.model";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { getJWTConfig } from "src/configs/jwt.config";
+import { getJWTConfig } from "../configs/jwt.config";
 
 @Module({
 	providers: [UsersService],

@@ -5,13 +5,13 @@ import { App } from "supertest/types";
 import { AppModule } from "../src/app.module";
 
 import { disconnect, Types } from "mongoose";
-import { CreateScheduleDto } from "src/schedule/dto/CreateSchedule.dto";
+import { CreateScheduleDto } from "../src/schedule/dto/CreateSchedule.dto";
 import {
 	INCORRECT_DATE,
 	INCORRECT_ROOM_ID,
 	SCHEDULE_NOT_FOUND,
 } from "../src/schedule/scheduleConstants";
-import { CreateRoomDto } from "src/rooms/dto/CreateRoom.dto";
+import { CreateRoomDto } from "../src/rooms/dto/CreateRoom.dto";
 
 const testScheduleDto: CreateScheduleDto = {
 	// Важно вызвать сначала метод создания комнаты и присвоить этот id
