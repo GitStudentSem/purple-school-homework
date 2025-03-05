@@ -1,7 +1,7 @@
 import { INestApplication } from "@nestjs/common";
 import { App } from "supertest/types";
 import * as request from "supertest";
-import { getAdminAccessToken } from "test/tools";
+import { getAdminAccessToken } from "../tools";
 import { CreateRoomDto } from "../../src/rooms/dto/CreateRoom.dto";
 
 const testRoomDto: CreateRoomDto = {

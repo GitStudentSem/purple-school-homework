@@ -6,6 +6,7 @@ import { AppModule } from "../../src/app.module";
 
 import { disconnect } from "mongoose";
 import { getAdminAccessToken } from "../tools";
+import { createRoom } from "./tools";
 
 let access_token_for_admin = "";
 
@@ -24,6 +25,8 @@ describe("/ (GET)", () => {
 	});
 
 	it("correct", async () => {
+		await createRoom(app);
+
 		return request(app.getHttpServer())
 			.get("/rooms")
 			.set("Authorization", `Bearer ${access_token_for_admin}`)

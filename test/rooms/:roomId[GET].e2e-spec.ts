@@ -8,10 +8,8 @@ import { disconnect } from "mongoose";
 import { CreateRoomDto } from "../../src/rooms/dto/CreateRoom.dto";
 import { ROOM_NOT_FOUND } from "../../src/rooms/roomConstants";
 import { getAdminAccessToken, getRandomId, getUserAccessToken } from "../tools";
-import {
-	FORBIDDEN_MESSAGE,
-	INVALID_TOKEN,
-} from "../../src/guards/guards.constants";
+import { INVALID_TOKEN } from "../../src/guards/guards.constants";
+import { createRoom } from "./tools";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
@@ -38,20 +36,9 @@ describe("/rooms/:roomId (GET)", () => {
 		access_token_for_user = await getUserAccessToken(app);
 	});
 
-	it("success create room", async () => {
-		return request(app.getHttpServer())
-			.post("/rooms/create")
-			.set("Authorization", `Bearer ${access_token_for_admin}`)
-			.send(testRoomDto)
-			.expect(201)
-			.then(({ body }: request.Response) => {
-				createdRoomId = body._id;
-				expect(body._id).toBeDefined();
-				return;
-			});
-	});
-
 	it("success", async () => {
+		createdRoomId = await createRoom(app);
+
 		return request(app.getHttpServer())
 			.get(`/rooms/${createdRoomId}`)
 			.set("Authorization", `Bearer ${access_token_for_admin}`)

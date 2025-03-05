@@ -12,6 +12,7 @@ import {
 	FORBIDDEN_MESSAGE,
 	INVALID_TOKEN,
 } from "../../src/guards/guards.constants";
+import { createRoom } from "./tools";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
@@ -38,20 +39,9 @@ describe("RoomController (e2e)", () => {
 	});
 
 	describe("/rooms/:roomId (DELETE)", () => {
-		it("success create room", async () => {
-			return request(app.getHttpServer())
-				.post("/rooms/create")
-				.set("Authorization", `Bearer ${access_token_for_admin}`)
-				.send(testRoomDto)
-				.expect(201)
-				.then(({ body }: request.Response) => {
-					createdRoomId = body._id;
-					expect(body._id).toBeDefined();
-					return;
-				});
-		});
+		it("success", async () => {
+			createdRoomId = await createRoom(app);
 
-		it("success", () => {
 			return request(app.getHttpServer())
 				.delete(`/rooms/${createdRoomId}`)
 				.set("Authorization", `Bearer ${access_token_for_admin}`)
