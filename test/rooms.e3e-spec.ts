@@ -33,30 +33,6 @@ describe("RoomController (e2e)", () => {
 		await app.init();
 	});
 
-	describe("/rooms/:roomId (GET)", () => {
-		it("should return the correct room details with additional properties", async () => {
-			return request(app.getHttpServer())
-				.get(`/rooms/${createdRoomId}`)
-				.expect(200)
-				.then(({ body }: request.Response) => {
-					expect(body).toEqual(
-						expect.objectContaining({
-							_id: expect.any(String),
-							roomNumber: expect.any(Number),
-							sleepingPlacesCount: expect.any(Number),
-							isSeaView: expect.any(Boolean),
-						}),
-					);
-				});
-		});
-
-		it("incorrect id", async () => {
-			return request(app.getHttpServer())
-				.get(`/rooms/${getRandomId()}`)
-				.expect(404, { statusCode: 404, message: ROOM_NOT_FOUND });
-		});
-	});
-
 	describe("/rooms (GET)", () => {
 		it("correct", async () => {
 			return request(app.getHttpServer())

@@ -78,17 +78,6 @@ describe("/rooms/:roomId (GET)", () => {
 			});
 	});
 
-	it("access denied for 'user' role", async () => {
-		return request(app.getHttpServer())
-			.get(`/rooms/${createdRoomId}`)
-			.set("Authorization", `Bearer ${access_token_for_user}`)
-			.expect(403)
-			.then(({ body }: request.Response) => {
-				expect(body.message).toBe(FORBIDDEN_MESSAGE);
-				return;
-			});
-	});
-
 	it("incorrect id", async () => {
 		return request(app.getHttpServer())
 			.get(`/rooms/${getRandomId()}`)

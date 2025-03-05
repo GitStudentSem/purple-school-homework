@@ -37,13 +37,11 @@ export class RoomsController {
 		return this.roomService.create(dto);
 	}
 
-	@Roles(Role.Admin)
 	@Get("/:roomId")
 	async getById(@Param("roomId") roomId: string) {
 		return this.roomService.getById(roomId);
 	}
 
-	@Roles(Role.Admin)
 	@Get()
 	async getAll() {
 		return this.roomService.getAll();
