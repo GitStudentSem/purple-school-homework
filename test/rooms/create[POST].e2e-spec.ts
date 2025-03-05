@@ -16,13 +16,14 @@ import {
 	INVALID_TOKEN,
 } from "../../src/guards/guards.constants";
 import { getAdminAccessToken, getUserAccessToken } from "../tools";
+import { deleteRoom } from "./tools";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
 	sleepingPlacesCount: 1,
 	isSeaView: false,
 };
-
+let createdRoomId = "";
 let access_token_for_admin = "";
 let access_token_for_user = "";
 
@@ -53,6 +54,7 @@ describe("/rooms/create (POST)", () => {
 			.send(testRoomDto)
 			.expect(201)
 			.then(({ body }: request.Response) => {
+				createdRoomId = body._id;
 				expect(body._id).toBeDefined();
 				return;
 			});
@@ -147,7 +149,8 @@ describe("/rooms/create (POST)", () => {
 			});
 	});
 
-	afterAll(() => {
+	afterAll(async () => {
+		await deleteRoom(app, createdRoomId);
 		disconnect();
 	});
 });

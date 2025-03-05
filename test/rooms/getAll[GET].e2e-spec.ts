@@ -6,10 +6,10 @@ import { AppModule } from "../../src/app.module";
 
 import { disconnect } from "mongoose";
 import { getAdminAccessToken } from "../tools";
-import { createRoom } from "./tools";
+import { createRoom, deleteRoom } from "./tools";
 
 let access_token_for_admin = "";
-
+let createdRoomId = "";
 describe("/ (GET)", () => {
 	let app: INestApplication<App>;
 
@@ -25,7 +25,7 @@ describe("/ (GET)", () => {
 	});
 
 	it("correct", async () => {
-		await createRoom(app);
+		createdRoomId = await createRoom(app);
 
 		return request(app.getHttpServer())
 			.get("/rooms")
@@ -37,7 +37,8 @@ describe("/ (GET)", () => {
 			});
 	});
 
-	afterAll(() => {
+	afterAll(async () => {
+		await deleteRoom(app, createdRoomId);
 		disconnect();
 	});
 });

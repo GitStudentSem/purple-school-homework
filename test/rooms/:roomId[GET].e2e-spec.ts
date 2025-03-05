@@ -9,7 +9,7 @@ import { CreateRoomDto } from "../../src/rooms/dto/CreateRoom.dto";
 import { ROOM_NOT_FOUND } from "../../src/rooms/roomConstants";
 import { getAdminAccessToken, getRandomId, getUserAccessToken } from "../tools";
 import { INVALID_TOKEN } from "../../src/guards/guards.constants";
-import { createRoom } from "./tools";
+import { createRoom, deleteRoom } from "./tools";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
@@ -72,7 +72,8 @@ describe("/rooms/:roomId (GET)", () => {
 			.expect(404, { statusCode: 404, message: ROOM_NOT_FOUND });
 	});
 
-	afterAll(() => {
+	afterAll(async () => {
+		await deleteRoom(app, createdRoomId);
 		disconnect();
 	});
 });

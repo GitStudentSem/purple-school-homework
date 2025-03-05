@@ -17,7 +17,7 @@ import {
 	FORBIDDEN_MESSAGE,
 	INVALID_TOKEN,
 } from "../../src/guards/guards.constants";
-import { createRoom } from "./tools";
+import { createRoom, deleteRoom } from "./tools";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
@@ -169,7 +169,8 @@ describe("/rooms/:roomId (PATCH)", () => {
 			});
 	});
 
-	afterAll(() => {
+	afterAll(async () => {
+		await deleteRoom(app, createdRoomId);
 		disconnect();
 	});
 });
