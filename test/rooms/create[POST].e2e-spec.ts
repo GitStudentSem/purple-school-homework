@@ -71,7 +71,7 @@ describe("/rooms/create (POST)", () => {
 			});
 	});
 
-	it("access denied 'user'", async () => {
+	it("access denied for 'user' role", async () => {
 		return request(app.getHttpServer())
 			.post(route)
 			.set("Authorization", `Bearer ${access_token_for_user}`)

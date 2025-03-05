@@ -22,7 +22,7 @@ const testRoomDto: CreateRoomDto = {
 
 describe("RoomController (e2e)", () => {
 	let app: INestApplication<App>;
-	let createdRoomId: string;
+	let createdRoomId = "";
 
 	beforeEach(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -31,82 +31,6 @@ describe("RoomController (e2e)", () => {
 
 		app = moduleFixture.createNestApplication();
 		await app.init();
-	});
-
-	// described
-	describe("/rooms/create (POST)", () => {
-		const route = "/rooms/create";
-		it("success", async () => {
-			return request(app.getHttpServer())
-				.post(route)
-				.send(testRoomDto)
-				.expect(201)
-				.then(({ body }: request.Response) => {
-					createdRoomId = body._id;
-					expect(createdRoomId).toBeDefined();
-					return;
-				});
-		});
-
-		it("roomNumber is less than 1", async () => {
-			return request(app.getHttpServer())
-				.post(route)
-				.send({ ...testRoomDto, roomNumber: 0 })
-				.expect(400)
-				.then(({ body }: request.Response) => {
-					expect(body.message[0]).toBe(INVALID_ROOM_NUMBER);
-				});
-		});
-
-		it("roomNumber is a string", async () => {
-			return request(app.getHttpServer())
-				.post(route)
-				.send({ ...testRoomDto, roomNumber: "asd" })
-				.expect(400)
-				.then(({ body }: request.Response) => {
-					expect(body.message[0]).toBe(INVALID_ROOM_NUMBER);
-				});
-		});
-
-		it("sleepingPlacesCount is less than 1", async () => {
-			return request(app.getHttpServer())
-				.post(route)
-				.send({ ...testRoomDto, sleepingPlacesCount: 0 })
-				.expect(400)
-				.then(({ body }: request.Response) => {
-					expect(body.message[0]).toBe(INVALID_SLEEPING_PLACES);
-				});
-		});
-
-		it("sleepingPlacesCount is more than 6", async () => {
-			return request(app.getHttpServer())
-				.post(route)
-				.send({ ...testRoomDto, sleepingPlacesCount: 7 })
-				.expect(400)
-				.then(({ body }: request.Response) => {
-					expect(body.message[0]).toBe(INVALID_SLEEPING_PLACES);
-				});
-		});
-
-		it("sleepingPlacesCount is a string", async () => {
-			return request(app.getHttpServer())
-				.post(route)
-				.send({ ...testRoomDto, sleepingPlacesCount: "asd" })
-				.expect(400)
-				.then(({ body }: request.Response) => {
-					expect(body.message[0]).toBe(INVALID_SLEEPING_PLACES);
-				});
-		});
-
-		it("isSeaView must be boolean", async () => {
-			return request(app.getHttpServer())
-				.post(route)
-				.send({ ...testRoomDto, isSeaView: 0 })
-				.expect(400)
-				.then(({ body }: request.Response) => {
-					expect(body.message[0]).toBe(INVALID_SEA_VIEW);
-				});
-		});
 	});
 
 	describe("/rooms/:roomId (GET)", () => {
