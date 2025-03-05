@@ -9,7 +9,7 @@ import { getAdminAccessToken } from "../tools";
 
 let access_token_for_admin = "";
 
-describe("RoomController (e2e)", () => {
+describe("/ (GET)", () => {
 	let app: INestApplication<App>;
 
 	beforeEach(async () => {
