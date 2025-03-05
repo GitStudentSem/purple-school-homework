@@ -28,7 +28,6 @@ let access_token_for_user = "";
 
 describe("/rooms/create (POST)", () => {
 	let app: INestApplication<App>;
-	let createdRoomId: string;
 
 	beforeEach(async () => {
 		/**
@@ -56,8 +55,7 @@ describe("/rooms/create (POST)", () => {
 			.send(testRoomDto)
 			.expect(201)
 			.then(({ body }: request.Response) => {
-				createdRoomId = body._id;
-				expect(createdRoomId).toBeDefined();
+				expect(body._id).toBeDefined();
 				return;
 			});
 	});
