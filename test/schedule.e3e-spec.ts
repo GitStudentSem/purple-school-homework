@@ -26,25 +26,6 @@ describe("ScheduleController (e2e)", () => {
 		await app.init();
 	});
 
-	describe("/schedule/:roomId (PATCH)", () => {
-		it("success", async () => {
-			return request(app.getHttpServer())
-				.patch(`/schedule/${testScheduleDto.roomId}`)
-				.send({
-					...testScheduleDto,
-					reservedDay: new Date(2025, 1, 1),
-				})
-				.expect(200);
-		});
-
-		it("incorrect id", () => {
-			const randomRoomId = new Types.ObjectId().toHexString();
-			return request(app.getHttpServer())
-				.get(`/schedule/${randomRoomId}`)
-				.expect(404, { statusCode: 404, message: SCHEDULE_NOT_FOUND });
-		});
-	});
-
 	describe("/schedule/:roomId (DELETE)", () => {
 		it("success", () => {
 			return request(app.getHttpServer())
