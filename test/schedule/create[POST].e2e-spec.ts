@@ -11,7 +11,12 @@ import {
 	INCORRECT_ROOM_ID,
 } from "../../src/schedule/scheduleConstants";
 
-import { createRoom, deleteRoom, getAdminAccessToken } from "../tools";
+import {
+	createRoom,
+	deleteRoom,
+	deleteSchedule,
+	getAdminAccessToken,
+} from "../tools";
 import { INVALID_TOKEN } from "../../src/guards/guards.constants";
 
 const testScheduleDto: CreateScheduleDto = {
@@ -87,6 +92,7 @@ describe("/schedule/create (POST)", () => {
 
 	afterAll(async () => {
 		await deleteRoom(app, testScheduleDto.roomId);
+		await deleteSchedule(app, testScheduleDto.roomId);
 		disconnect();
 	});
 });

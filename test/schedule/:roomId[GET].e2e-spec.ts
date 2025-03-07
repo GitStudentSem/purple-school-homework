@@ -7,7 +7,7 @@ import { AppModule } from "../../src/app.module";
 import { disconnect, Types } from "mongoose";
 import { CreateScheduleDto } from "../../src/schedule/dto/CreateSchedule.dto";
 import { SCHEDULE_NOT_FOUND } from "../../src/schedule/scheduleConstants";
-import { CreateRoomDto } from "../../src/rooms/dto/CreateRoom.dto";
+
 import {
 	createRoom,
 	createSchedule,
@@ -23,11 +23,6 @@ const testScheduleDto: CreateScheduleDto = {
 	reservedDay: new Date(),
 };
 
-const testRoomDto: CreateRoomDto = {
-	roomNumber: 1,
-	sleepingPlacesCount: 1,
-	isSeaView: false,
-};
 let access_token_for_admin = "";
 
 describe("/schedule/:roomId (GET)", () => {
