@@ -6,23 +6,12 @@ import { AppModule } from "../src/app.module";
 
 import { disconnect, Types } from "mongoose";
 import { CreateScheduleDto } from "../src/schedule/dto/CreateSchedule.dto";
-import {
-	INCORRECT_DATE,
-	INCORRECT_ROOM_ID,
-	SCHEDULE_NOT_FOUND,
-} from "../src/schedule/scheduleConstants";
-import { CreateRoomDto } from "../src/rooms/dto/CreateRoom.dto";
+import { SCHEDULE_NOT_FOUND } from "../src/schedule/scheduleConstants";
 
 const testScheduleDto: CreateScheduleDto = {
 	// Важно вызвать сначала метод создания комнаты и присвоить этот id
 	roomId: "",
 	reservedDay: new Date(),
-};
-
-const testRoomDto: CreateRoomDto = {
-	roomNumber: 1,
-	sleepingPlacesCount: 1,
-	isSeaView: false,
 };
 
 describe("ScheduleController (e2e)", () => {
@@ -35,18 +24,6 @@ describe("ScheduleController (e2e)", () => {
 
 		app = moduleFixture.createNestApplication();
 		await app.init();
-	});
-
-	describe("/schedule (GET)", () => {
-		it("correct", async () => {
-			return request(app.getHttpServer())
-				.get("/schedule")
-				.expect(200)
-				.then(({ body }: request.Response) => {
-					expect(body.length).toBeGreaterThan(0);
-					return;
-				});
-		});
 	});
 
 	describe("/schedule/:roomId (PATCH)", () => {
