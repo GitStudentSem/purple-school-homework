@@ -53,10 +53,6 @@ describe("/schedule/:roomId (PATCH)", () => {
 	});
 
 	it("without token", async () => {
-		const createdRoomId = await createRoom(app);
-		testScheduleDto.roomId = createdRoomId;
-		await createSchedule(app, createdRoomId);
-
 		return request(app.getHttpServer())
 			.patch(`/schedule/${testScheduleDto.roomId}`)
 			.send({

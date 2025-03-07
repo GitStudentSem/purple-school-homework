@@ -4,9 +4,9 @@ import * as request from "supertest";
 import { App } from "supertest/types";
 import { AppModule } from "../../src/app.module";
 
-import { disconnect } from "mongoose";
+import { disconnect, Types } from "mongoose";
 import { CreateScheduleDto } from "../../src/schedule/dto/CreateSchedule.dto";
-
+import { SCHEDULE_NOT_FOUND } from "../../src/schedule/scheduleConstants";
 import {
 	createRoom,
 	createSchedule,
@@ -21,10 +21,9 @@ const testScheduleDto: CreateScheduleDto = {
 	roomId: "",
 	reservedDay: new Date(),
 };
-
 let access_token_for_admin = "";
 
-describe("/schedule (GET)", () => {
+describe("/schedule/:roomId (DELETE)", () => {
 	let app: INestApplication<App>;
 
 	beforeEach(async () => {
@@ -38,29 +37,33 @@ describe("/schedule (GET)", () => {
 		access_token_for_admin = await getAdminAccessToken(app);
 	});
 
-	it("correct", async () => {
+	it("success", async () => {
 		const createdRoomId = await createRoom(app);
 		testScheduleDto.roomId = createdRoomId;
 		await createSchedule(app, createdRoomId);
 
 		return request(app.getHttpServer())
-			.get("/schedule")
+			.delete(`/schedule/${testScheduleDto.roomId}`)
 			.set("Authorization", `Bearer ${access_token_for_admin}`)
-			.expect(200)
-			.then(({ body }: request.Response) => {
-				expect(body.length).toBeGreaterThan(0);
-				return;
-			});
+			.expect(200);
 	});
 
 	it("without token", async () => {
 		return request(app.getHttpServer())
-			.get("/schedule")
+			.delete(`/schedule/${testScheduleDto.roomId}`)
 			.expect(401)
 			.then(({ body }: request.Response) => {
 				expect(body.message).toBe(INVALID_TOKEN);
 				return;
 			});
+	});
+
+	it("incorrect id", () => {
+		const randomRoomId = new Types.ObjectId().toHexString();
+		return request(app.getHttpServer())
+			.delete(`/schedule/${randomRoomId}`)
+			.set("Authorization", `Bearer ${access_token_for_admin}`)
+			.expect(404, { statusCode: 404, message: SCHEDULE_NOT_FOUND });
 	});
 
 	afterAll(async () => {
