@@ -17,7 +17,7 @@ import {
 	FORBIDDEN_MESSAGE,
 	INVALID_TOKEN,
 } from "../../src/guards/guards.constants";
-import { createRoom, deleteRoom } from "./tools";
+import { createRoom, deleteRoom } from "../tools";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,

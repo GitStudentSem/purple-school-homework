@@ -6,7 +6,7 @@ import { AppModule } from "../../src/app.module";
 
 import { disconnect } from "mongoose";
 import { getAdminAccessToken } from "../tools";
-import { createRoom, deleteRoom } from "./tools";
+import { createRoom, deleteRoom } from "../tools";
 
 let access_token_for_admin = "";
 let createdRoomId = "";

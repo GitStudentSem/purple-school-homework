@@ -1,6 +1,7 @@
 import { INestApplication } from "@nestjs/common";
 import { Types } from "mongoose";
 import { LoginDto } from "src/auth/dto/login.dto";
+import { CreateRoomDto } from "src/rooms/dto/CreateRoom.dto";
 
 import * as request from "supertest";
 import { App } from "supertest/types";
@@ -15,6 +16,12 @@ const adminLoginDto: LoginDto = {
 const userLoginDto: LoginDto = {
 	email: "purnemtzev.semyon_1@yandex.ru",
 	password: "112233",
+};
+
+const testRoomDto: CreateRoomDto = {
+	roomNumber: 1,
+	sleepingPlacesCount: 1,
+	isSeaView: false,
 };
 
 export const getAdminAccessToken = async (app: INestApplication<App>) => {
@@ -39,4 +46,28 @@ export const getUserAccessToken = async (app: INestApplication<App>) => {
 	}
 
 	return response.body.access_token;
+};
+
+export const createRoom = async (app: INestApplication<App>) => {
+	const access_token_for_admin = await getAdminAccessToken(app);
+
+	const response = await request(app.getHttpServer())
+		.post("/rooms/create")
+		.set("Authorization", `Bearer ${access_token_for_admin}`)
+		.send(testRoomDto);
+
+	return response.body._id;
+};
+
+export const deleteRoom = async (
+	app: INestApplication<App>,
+	createdRoomId: string,
+) => {
+	const access_token_for_admin = await getAdminAccessToken(app);
+
+	const response = await request(app.getHttpServer())
+		.delete(`/rooms/${createdRoomId}`)
+		.set("Authorization", `Bearer ${access_token_for_admin}`);
+
+	return response.body._id;
 };

@@ -9,7 +9,7 @@ import { CreateRoomDto } from "../../src/rooms/dto/CreateRoom.dto";
 import { ROOM_NOT_FOUND } from "../../src/rooms/roomConstants";
 import { getAdminAccessToken, getRandomId, getUserAccessToken } from "../tools";
 import { INVALID_TOKEN } from "../../src/guards/guards.constants";
-import { createRoom, deleteRoom } from "./tools";
+import { createRoom, deleteRoom } from "../tools";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,

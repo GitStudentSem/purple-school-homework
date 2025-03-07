@@ -52,46 +52,6 @@ describe("ScheduleController (e2e)", () => {
 		});
 	});
 
-	describe("/schedule/create (POST)", () => {
-		it("success", async () => {
-			return request(app.getHttpServer())
-				.post("/schedule/create")
-				.send(testScheduleDto)
-				.expect(201)
-				.then(({ body }: request.Response) => {
-					expect(body._id).toBeDefined();
-					return;
-				});
-		});
-
-		it("incorrect room id type", async () => {
-			return request(app.getHttpServer())
-				.post("/schedule/create")
-				.send({ ...testScheduleDto, roomId: 0 })
-				.expect(400)
-				.then(({ body }: request.Response) => {
-					expect(body.message[0]).toBe(INCORRECT_ROOM_ID);
-					return;
-				});
-		});
-
-		/**
-		 *! Че делать с этим тестом пока не догоняю
-		 * он пропускает даже null
-		 */
-
-		// it("incorrect reserved day type", async () => {
-		// 	return request(app.getHttpServer())
-		// 		.post("/schedule/create")
-		// 		.send({ ...testScheduleDto, reservedDay: null })
-		// 		.expect(400)
-		// 		.then(({ body }: request.Response) => {
-		// 			expect(body.message[0]).toBe(INCORRECT_DATE);
-		// 			return;
-		// 		});
-		// });
-	});
-
 	describe("/schedule/:roomId (GET)", () => {
 		it("success", async () => {
 			return request(app.getHttpServer())

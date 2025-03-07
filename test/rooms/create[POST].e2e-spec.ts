@@ -16,7 +16,7 @@ import {
 	INVALID_TOKEN,
 } from "../../src/guards/guards.constants";
 import { getAdminAccessToken, getUserAccessToken } from "../tools";
-import { deleteRoom } from "./tools";
+import { deleteRoom } from "../tools";
 
 const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
