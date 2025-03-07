@@ -2,6 +2,7 @@ import { INestApplication } from "@nestjs/common";
 import { Types } from "mongoose";
 import { LoginDto } from "src/auth/dto/login.dto";
 import { CreateRoomDto } from "src/rooms/dto/CreateRoom.dto";
+import { CreateScheduleDto } from "src/schedule/dto/CreateSchedule.dto";
 
 import * as request from "supertest";
 import { App } from "supertest/types";
@@ -22,6 +23,12 @@ const testRoomDto: CreateRoomDto = {
 	roomNumber: 1,
 	sleepingPlacesCount: 1,
 	isSeaView: false,
+};
+
+const testScheduleDto: CreateScheduleDto = {
+	// Важно вызвать сначала метод создания комнаты и присвоить этот id
+	roomId: "",
+	reservedDay: new Date(),
 };
 
 export const getAdminAccessToken = async (app: INestApplication<App>) => {
@@ -67,6 +74,33 @@ export const deleteRoom = async (
 
 	const response = await request(app.getHttpServer())
 		.delete(`/rooms/${createdRoomId}`)
+		.set("Authorization", `Bearer ${access_token_for_admin}`);
+
+	return response.body._id;
+};
+
+export const createSchedule = async (
+	app: INestApplication<App>,
+	roomId: string,
+) => {
+	const access_token_for_admin = await getAdminAccessToken(app);
+
+	const response = await request(app.getHttpServer())
+		.post("/schedule/create")
+		.set("Authorization", `Bearer ${access_token_for_admin}`)
+		.send({ ...testScheduleDto, roomId });
+
+	return response.body._id;
+};
+
+export const deleteSchedule = async (
+	app: INestApplication<App>,
+	createdRoomId: string,
+) => {
+	const access_token_for_admin = await getAdminAccessToken(app);
+
+	const response = await request(app.getHttpServer())
+		.delete(`/schedule/${createdRoomId}`)
 		.set("Authorization", `Bearer ${access_token_for_admin}`);
 
 	return response.body._id;

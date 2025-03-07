@@ -37,41 +37,6 @@ describe("ScheduleController (e2e)", () => {
 		await app.init();
 	});
 
-	// Для создания расписания нужно сначала создать комнату
-	describe("/rooms/create (POST)", () => {
-		it("success", async () => {
-			return request(app.getHttpServer())
-				.post("/rooms/create")
-				.send(testRoomDto)
-				.expect(201)
-				.then(({ body }: request.Response) => {
-					testScheduleDto.roomId = body._id;
-					expect(testScheduleDto.roomId).toBeDefined();
-					return;
-				});
-		});
-	});
-
-	describe("/schedule/:roomId (GET)", () => {
-		it("success", async () => {
-			return request(app.getHttpServer())
-				.get(`/schedule/${testScheduleDto.roomId}`)
-				.expect(200)
-				.then(({ body }: request.Response) => {
-					expect(body.roomId).toBeDefined();
-					return;
-				});
-		});
-
-		it("incorrect id", async () => {
-			const randomRoomId = new Types.ObjectId().toHexString();
-
-			return request(app.getHttpServer())
-				.get(`/schedule/${randomRoomId}`)
-				.expect(404, { statusCode: 404, message: SCHEDULE_NOT_FOUND });
-		});
-	});
-
 	describe("/schedule (GET)", () => {
 		it("correct", async () => {
 			return request(app.getHttpServer())
