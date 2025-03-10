@@ -5,6 +5,8 @@ export const USER_NOT_FOUND_ERROR = "Пользователь с таким emai
 export const WRONG_PASSWORD_ERROR = "Неверный пароль";
 
 export const INCORRECT_EMAIL_FORMAT = "Неверный формат почты";
+
+export const INCORRECT_PASSWORD_TYPE = "Пароль должен быть строкой";
 export const INCORRECT_PASSWORD_LENGTH =
 	"Пароль должен содержать минимум 6 символов";
 export const INCORRECT_NAME_FORMAT = "Имя должно быть строкой";

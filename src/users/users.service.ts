@@ -19,12 +19,9 @@ export class UsersService {
 		private readonly jwtService: JwtService,
 	) {}
 
-	async findUser(email: string): Promise<UserDocument> {
+	async findUser(email: string): Promise<UserDocument | null> {
 		const foundedUser = await this.userModel.findOne({ email }).exec();
 
-		if (!foundedUser) {
-			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
-		}
 		return foundedUser;
 	}
 
@@ -46,17 +43,25 @@ export class UsersService {
 		email: string,
 		password: string,
 	): Promise<Pick<User, "email">> {
-		const user = await this.findUser(email);
+		const foundedUser = await this.findUser(email);
 
-		const isCorrectPassword = await compare(password, user.passwordHash);
+		if (!foundedUser) {
+			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
+		}
+
+		const isCorrectPassword = await compare(password, foundedUser.passwordHash);
 		if (!isCorrectPassword) {
 			throw new UnauthorizedException(WRONG_PASSWORD_ERROR);
 		}
-		return { email: user.email };
+		return { email: foundedUser.email };
 	}
 
 	async setRole(dto: SetRoleDto): Promise<void> {
-		await this.findUser(dto.email);
+		const foundedUser = await this.findUser(dto.email);
+
+		if (!foundedUser) {
+			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
+		}
 
 		await this.userModel.updateOne(
 			{ email: dto.email },
