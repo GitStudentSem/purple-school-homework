@@ -105,3 +105,12 @@ export const deleteSchedule = async (
 
 	return response.body._id;
 };
+
+export const deleteUser = async (app: INestApplication<App>, email: string) => {
+	const access_token_for_admin = await getAdminAccessToken(app);
+
+	await request(app.getHttpServer())
+		.delete("/users")
+		.set("Authorization", `Bearer ${access_token_for_admin}`)
+		.send({ email });
+};

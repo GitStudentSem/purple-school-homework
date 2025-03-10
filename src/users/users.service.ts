@@ -79,4 +79,12 @@ export class UsersService {
 		 * Пока что оставлю воид и 204
 		 */
 	}
+
+	async deleteUser(email: string): Promise<void> {
+		const { deletedCount } = await this.userModel.deleteOne({ email }).exec();
+
+		if (deletedCount === 0) {
+			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
+		}
+	}
 }

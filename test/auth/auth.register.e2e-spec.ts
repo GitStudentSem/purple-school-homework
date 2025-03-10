@@ -4,7 +4,7 @@ import * as request from "supertest";
 import { App } from "supertest/types";
 import { AppModule } from "../../src/app.module";
 import { disconnect } from "mongoose";
-import { LoginDto } from "../../src/auth/dto/login.dto";
+
 import {
 	ALREADY_REGISTERED_ERROR,
 	INCORRECT_EMAIL_FORMAT,
@@ -15,6 +15,7 @@ import {
 	INCORRECT_PHONE_NUMBER_FORMAT,
 } from "../../src/auth/auth.constants";
 import { RegisterDto } from "src/auth/dto/register.dto";
+import { deleteUser } from "../tools";
 
 const newUserDto: RegisterDto = {
 	email: "purnemtzev.semyon_4@yandex.ru",
@@ -123,7 +124,8 @@ describe("/auth/register (POST)", () => {
 			});
 	});
 
-	afterAll(() => {
+	afterAll(async () => {
+		await deleteUser(app, newUserDto.email);
 		disconnect();
 	});
 });
