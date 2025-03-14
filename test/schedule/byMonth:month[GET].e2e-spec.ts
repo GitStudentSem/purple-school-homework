@@ -5,26 +5,20 @@ import { App } from "supertest/types";
 import { AppModule } from "../../src/app.module";
 
 import { disconnect } from "mongoose";
-import { CreateRoomDto } from "../../src/rooms/dto/CreateRoom.dto";
-import { ROOM_NOT_FOUND } from "../../src/rooms/roomConstants";
-import { getAdminAccessToken, getRandomId, getUserAccessToken } from "../tools";
+
+import { getAdminAccessToken, getUserAccessToken } from "../tools";
 import {
 	FORBIDDEN_MESSAGE,
 	INVALID_TOKEN,
 } from "../../src/guards/guards.constants";
-import { createRoom, deleteRoom } from "../tools";
+import { MONTH_SHOULD_BE_NUMBER } from "../../src/schedule/scheduleConstants";
+import { INVALID_MONTH } from "../../src/pipes/pipes.constants";
 
-const testRoomDto: CreateRoomDto = {
-	roomNumber: 1,
-	sleepingPlacesCount: 1,
-	isSeaView: false,
-};
 let access_token_for_admin = "";
 let access_token_for_user = "";
 
-describe("/rooms/:roomId (DELETE)", () => {
+describe("/schedule/byMonth/:month", () => {
 	let app: INestApplication<App>;
-	let createdRoomId = "";
 
 	beforeEach(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -39,18 +33,16 @@ describe("/rooms/:roomId (DELETE)", () => {
 	});
 
 	it("success", async () => {
-		createdRoomId = await createRoom(app);
-
-		return request(app.getHttpServer())
-			.delete(`/rooms/${createdRoomId}`)
+		const { body } = await request(app.getHttpServer())
+			.get("/schedule/byMonth/1")
 			.set("Authorization", `Bearer ${access_token_for_admin}`)
 			.expect(200);
+		expect(body.length).toBeDefined();
 	});
 
 	it("without token", async () => {
 		return request(app.getHttpServer())
-			.delete(`/rooms/${createdRoomId}`)
-			.send(testRoomDto)
+			.get("/schedule/byMonth/1")
 			.expect(401)
 			.then(({ body }: request.Response) => {
 				expect(body.message).toBe(INVALID_TOKEN);
@@ -60,9 +52,8 @@ describe("/rooms/:roomId (DELETE)", () => {
 
 	it("access denied for 'user' role", async () => {
 		return request(app.getHttpServer())
-			.delete(`/rooms/${createdRoomId}`)
+			.get("/schedule/byMonth/1")
 			.set("Authorization", `Bearer ${access_token_for_user}`)
-			.send(testRoomDto)
 			.expect(403)
 			.then(({ body }: request.Response) => {
 				expect(body.message).toBe(FORBIDDEN_MESSAGE);
@@ -70,15 +61,25 @@ describe("/rooms/:roomId (DELETE)", () => {
 			});
 	});
 
-	it("incorrect id", () => {
-		return request(app.getHttpServer())
-			.delete(`/rooms/${getRandomId()}`)
+	it("incorrect month type", async () => {
+		const { body } = await request(app.getHttpServer())
+			.get("/schedule/byMonth/asd")
 			.set("Authorization", `Bearer ${access_token_for_admin}`)
-			.expect(404, { statusCode: 404, message: ROOM_NOT_FOUND });
+			.expect(400);
+
+		expect(body.message).toBe(MONTH_SHOULD_BE_NUMBER);
+	});
+
+	it("incorrect month number", async () => {
+		const { body } = await request(app.getHttpServer())
+			.get("/schedule/byMonth/40")
+			.set("Authorization", `Bearer ${access_token_for_admin}`)
+			.expect(400);
+
+		expect(body.message).toBe(INVALID_MONTH);
 	});
 
 	afterAll(async () => {
-		await deleteRoom(app, createdRoomId);
 		disconnect();
 	});
 });
