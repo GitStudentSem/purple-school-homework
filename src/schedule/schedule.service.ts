@@ -28,6 +28,26 @@ export class ScheduleService {
 		return this.scheduleModel.find().exec();
 	}
 
+	async getStatisticByMonth(month: number): Promise<ScheduleDocument[]> {
+		const currentYear = new Date().getFullYear();
+		const startOfMonth = new Date(currentYear, month - 1, 1);
+		const endOfMonth = new Date(currentYear, month, 1);
+
+		return await this.scheduleModel
+			.aggregate()
+			.match({
+				reservedDay: {
+					$gte: startOfMonth,
+					$lt: endOfMonth,
+				},
+			})
+			.group({
+				_id: "$roomId",
+				count: { $sum: 1 },
+			})
+			.sort({ count: -1 });
+	}
+
 	async update(roomId: string, date: Date): Promise<ScheduleDocument | null> {
 		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
 

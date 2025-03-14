@@ -17,6 +17,7 @@ import { JwtAuthGuard } from "../guards/jwt.guard";
 import { Roles } from "../decorators/roles.decorator";
 import { Role } from "../auth/auth.constants";
 import { RoleGuard } from "../guards/role.guard";
+import { IdValidationPipe } from "src/pipes/id-validation.pipe";
 
 /**
  * Ты про это говорил когда имел в виду что бы я поднял пайпы?
@@ -38,7 +39,7 @@ export class RoomsController {
 	}
 
 	@Get("/:roomId")
-	async getById(@Param("roomId") roomId: string) {
+	async getById(@Param("roomId", IdValidationPipe) roomId: string) {
 		return this.roomService.getById(roomId);
 	}
 
@@ -49,13 +50,16 @@ export class RoomsController {
 
 	@Roles(Role.Admin)
 	@Patch("/:roomId")
-	async update(@Param("roomId") roomId: string, @Body() dto: UpdateRoomDto) {
+	async update(
+		@Param("roomId", IdValidationPipe) roomId: string,
+		@Body() dto: UpdateRoomDto,
+	) {
 		return this.roomService.update(roomId, dto);
 	}
 
 	@Roles(Role.Admin)
 	@Delete(":roomId")
-	async delete(@Param("roomId") roomId: string) {
+	async delete(@Param("roomId", IdValidationPipe) roomId: string) {
 		return this.roomService.delete(roomId);
 	}
 }
