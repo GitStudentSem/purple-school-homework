@@ -45,6 +45,11 @@ export class ScheduleService {
 				_id: "$roomId",
 				count: { $sum: 1 },
 			})
+			.project({
+				_id: 0,
+				roomId: "$_id",
+				count: 1,
+			})
 			.sort({ count: -1 });
 	}
 
