@@ -1,4 +1,4 @@
-import { Role } from "../auth/auth.constants";
+import { Role } from "../enums/roles";
 
 export const INCORRECT_ROLE_TYPE = `Роль должна быть строкой`;
 export const INCORRECT_ROLE_VALUE = `Роль должна быть '${Role.User}' или '${Role.Admin}'`;

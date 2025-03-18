@@ -4,7 +4,7 @@ import {
 	INCORRECT_ROLE_TYPE,
 	INCORRECT_ROLE_VALUE,
 } from "../users.constants";
-import { Role } from "../../auth/auth.constants";
+import { Role } from "../../enums/roles";
 
 export class SetRoleDto {
 	@IsEmail(undefined, { message: INCORRECT_EMAIL_FORMAT })

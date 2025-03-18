@@ -6,11 +6,11 @@ import { JwtService } from "@nestjs/jwt";
 import { RegisterDto } from "../auth/dto/register.dto";
 import { compare, hash } from "bcryptjs";
 import {
-	Role,
 	USER_NOT_FOUND_ERROR,
 	WRONG_PASSWORD_ERROR,
 } from "../auth/auth.constants";
 import { SetRoleDto } from "./dto/setRole.dto";
+import { Role } from "../enums/roles";
 
 @Injectable()
 export class UsersService {

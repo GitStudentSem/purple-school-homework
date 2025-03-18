@@ -20,7 +20,7 @@ import { MonthValidationPipe } from "../pipes/month-validation.pipe";
 import { MONTH_SHOULD_BE_NUMBER } from "./scheduleConstants";
 import { RoleGuard } from "../guards/role.guard";
 import { Roles } from "../decorators/roles.decorator";
-import { Role } from "../auth/auth.constants";
+import { Role } from "../enums/roles";
 
 /**
  * По-моему тут можно и не делать проверку на роль юзера

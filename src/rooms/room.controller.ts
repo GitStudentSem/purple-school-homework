@@ -15,9 +15,9 @@ import { CreateRoomDto } from "./dto/CreateRoom.dto";
 import { UpdateRoomDto } from "./dto/UpdateRoom.dto";
 import { JwtAuthGuard } from "../guards/jwt.guard";
 import { Roles } from "../decorators/roles.decorator";
-import { Role } from "../auth/auth.constants";
 import { RoleGuard } from "../guards/role.guard";
 import { IdValidationPipe } from "../pipes/id-validation.pipe";
+import { Role } from "../enums/roles";
 
 /**
  * Ты про это говорил когда имел в виду что бы я поднял пайпы?

@@ -1,10 +1,4 @@
-import {
-	IsEmail,
-	IsIn,
-	IsPhoneNumber,
-	IsString,
-	Length,
-} from "class-validator";
+import { IsEmail, IsPhoneNumber, IsString, Length } from "class-validator";
 import {
 	INCORRECT_EMAIL_FORMAT,
 	INCORRECT_NAME_FORMAT,

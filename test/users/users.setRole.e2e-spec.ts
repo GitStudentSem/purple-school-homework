@@ -14,13 +14,13 @@ import {
 import { SetRoleDto } from "../../src/users/dto/setRole.dto";
 import {
 	INCORRECT_EMAIL_FORMAT,
-	Role,
 	USER_NOT_FOUND_ERROR,
 } from "../../src/auth/auth.constants";
 import {
 	INCORRECT_ROLE_TYPE,
 	INCORRECT_ROLE_VALUE,
 } from "../../src/users/users.constants";
+import { Role } from "../../src/enums/roles";
 
 const setRoleDto: SetRoleDto = {
 	email: "purnemtzev.semyon@yandex.ru",

@@ -1,5 +1,4 @@
 import {
-	BadRequestException,
 	Body,
 	Controller,
 	Delete,
@@ -14,8 +13,8 @@ import { SetRoleDto } from "./dto/setRole.dto";
 import { JwtAuthGuard } from "../guards/jwt.guard";
 import { RoleGuard } from "../guards/role.guard";
 import { Roles } from "../decorators/roles.decorator";
-import { Role } from "../auth/auth.constants";
 import { DeleteUserDto } from "./dto/deleteUser.dto";
+import { Role } from "../enums/roles";
 
 @Controller("users")
 export class UsersController {
