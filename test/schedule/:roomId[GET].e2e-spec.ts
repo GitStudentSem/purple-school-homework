@@ -6,7 +6,7 @@ import { AppModule } from "../../src/app.module";
 
 import { disconnect, Types } from "mongoose";
 import { CreateScheduleDto } from "../../src/schedule/dto/CreateSchedule.dto";
-import { SCHEDULE_NOT_FOUND } from "../../src/schedule/scheduleConstants";
+import { SCHEDULE_NOT_FOUND } from "../../src/schedule/schedule.constants";
 
 import {
 	createRoom,

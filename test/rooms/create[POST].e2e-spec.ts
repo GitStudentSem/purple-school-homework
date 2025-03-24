@@ -10,7 +10,7 @@ import {
 	INVALID_ROOM_NUMBER,
 	INVALID_SLEEPING_PLACES,
 	INVALID_SEA_VIEW,
-} from "../../src/rooms/roomConstants";
+} from "../../src/rooms/room.constants";
 import {
 	FORBIDDEN_MESSAGE,
 	INVALID_TOKEN,

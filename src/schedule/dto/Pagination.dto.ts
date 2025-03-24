@@ -5,7 +5,7 @@ import {
 	INVALID_LIMIT_VALUE,
 	INVALID_PAGE_FORMAT,
 	INVALID_PAGE_VALUE,
-} from "../room.constants";
+} from "../schedule.constants";
 
 export class PaginationDto {
 	@IsOptional()

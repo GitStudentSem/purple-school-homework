@@ -11,7 +11,7 @@ import {
 	FORBIDDEN_MESSAGE,
 	INVALID_TOKEN,
 } from "../../src/guards/guards.constants";
-import { MONTH_SHOULD_BE_NUMBER } from "../../src/schedule/scheduleConstants";
+import { MONTH_SHOULD_BE_NUMBER } from "../../src/schedule/schedule.constants";
 import { INVALID_MONTH } from "../../src/pipes/pipes.constants";
 
 let access_token_for_admin = "";

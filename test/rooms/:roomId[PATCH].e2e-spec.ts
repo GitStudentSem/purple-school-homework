@@ -11,7 +11,7 @@ import {
 	ROOM_NOT_FOUND,
 	INVALID_SLEEPING_PLACES,
 	INVALID_SEA_VIEW,
-} from "../../src/rooms/roomConstants";
+} from "../../src/rooms/room.constants";
 import { getAdminAccessToken, getRandomId, getUserAccessToken } from "../tools";
 import {
 	FORBIDDEN_MESSAGE,

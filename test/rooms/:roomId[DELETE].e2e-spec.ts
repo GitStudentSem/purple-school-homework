@@ -6,7 +6,7 @@ import { AppModule } from "../../src/app.module";
 
 import { disconnect } from "mongoose";
 import { CreateRoomDto } from "../../src/rooms/dto/CreateRoom.dto";
-import { ROOM_NOT_FOUND } from "../../src/rooms/roomConstants";
+import { ROOM_NOT_FOUND } from "../../src/rooms/room.constants";
 import { getAdminAccessToken, getRandomId, getUserAccessToken } from "../tools";
 import {
 	FORBIDDEN_MESSAGE,

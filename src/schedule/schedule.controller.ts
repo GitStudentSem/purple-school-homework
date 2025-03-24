@@ -8,6 +8,7 @@ import {
 	ParseIntPipe,
 	Patch,
 	Post,
+	Query,
 	UseGuards,
 	UsePipes,
 	ValidationPipe,
@@ -17,19 +18,12 @@ import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
 import { JwtAuthGuard } from "../guards/jwt.guard";
 import { IdValidationPipe } from "../pipes/id-validation.pipe";
 import { MonthValidationPipe } from "../pipes/month-validation.pipe";
-import { MONTH_SHOULD_BE_NUMBER } from "./scheduleConstants";
+import { MONTH_SHOULD_BE_NUMBER } from "./schedule.constants";
 import { RoleGuard } from "../guards/role.guard";
 import { Roles } from "../decorators/roles.decorator";
 import { Role } from "../enums/roles";
+import { PaginationDto } from "./dto/Pagination.dto";
 
-/**
- * По-моему тут можно и не делать проверку на роль юзера
- * ибо ничего страшного если и админы смогут менять расписание
- *
- * или нет?
- *
- * Не до конца въехал в концепцию приложения
- */
 @UseGuards(JwtAuthGuard)
 @UsePipes(new ValidationPipe())
 @Controller("schedule")
@@ -47,8 +41,8 @@ export class ScheduleController {
 	}
 
 	@Get()
-	async getAll() {
-		return this.scheduleService.getAll();
+	async getAll(@Query() paginationDto: PaginationDto) {
+		return this.scheduleService.getAll(paginationDto);
 	}
 
 	@UseGuards(RoleGuard)

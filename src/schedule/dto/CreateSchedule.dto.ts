@@ -1,5 +1,5 @@
 import { IsDate, IsDefined, IsString } from "class-validator";
-import { INCORRECT_DATE, INCORRECT_ROOM_ID } from "../scheduleConstants";
+import { INCORRECT_DATE, INCORRECT_ROOM_ID } from "../schedule.constants";
 import { Transform } from "class-transformer";
 
 export class CreateScheduleDto {

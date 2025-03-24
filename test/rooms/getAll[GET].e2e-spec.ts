@@ -12,7 +12,7 @@ import {
 	INVALID_LIMIT_VALUE,
 	INVALID_PAGE_FORMAT,
 	INVALID_PAGE_VALUE,
-} from "../../src/rooms/roomConstants";
+} from "../../src/rooms/room.constants";
 
 let access_token_for_admin = "";
 const createdRoomsIds: string[] = [];

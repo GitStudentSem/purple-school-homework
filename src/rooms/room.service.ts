@@ -4,7 +4,7 @@ import { RoomDocument, Room } from "./room.model";
 import { Model } from "mongoose";
 import { CreateRoomDto } from "./dto/CreateRoom.dto";
 import { UpdateRoomDto } from "./dto/UpdateRoom.dto";
-import { ROOM_NOT_FOUND } from "./roomConstants";
+import { ROOM_NOT_FOUND } from "./room.constants";
 import { PaginationDto } from "./dto/Pagination.dto";
 
 @Injectable()

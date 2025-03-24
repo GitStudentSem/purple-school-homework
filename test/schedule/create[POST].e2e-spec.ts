@@ -9,7 +9,7 @@ import { CreateScheduleDto } from "../../src/schedule/dto/CreateSchedule.dto";
 import {
 	INCORRECT_DATE,
 	INCORRECT_ROOM_ID,
-} from "../../src/schedule/scheduleConstants";
+} from "../../src/schedule/schedule.constants";
 
 import {
 	createRoom,

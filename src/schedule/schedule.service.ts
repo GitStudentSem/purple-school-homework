@@ -3,7 +3,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { ScheduleDocument, Schedule } from "./schedule.model";
 import { Model } from "mongoose";
 import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
-import { SCHEDULE_NOT_FOUND } from "./scheduleConstants";
+import { SCHEDULE_NOT_FOUND } from "./schedule.constants";
+import { PaginationDto } from "./dto/Pagination.dto";
 
 @Injectable()
 export class ScheduleService {
@@ -24,8 +25,13 @@ export class ScheduleService {
 		return foundedSchedule;
 	}
 
-	async getAll(): Promise<ScheduleDocument[] | null> {
-		return this.scheduleModel.find().exec();
+	async getAll(
+		paginationDto: PaginationDto,
+	): Promise<ScheduleDocument[] | null> {
+		const { page = 1, limit = 10 } = paginationDto;
+		const skip = (page - 1) * limit;
+
+		return this.scheduleModel.find().skip(skip).limit(limit).exec();
 	}
 
 	async getStatisticByMonth(month: number): Promise<ScheduleDocument[]> {
