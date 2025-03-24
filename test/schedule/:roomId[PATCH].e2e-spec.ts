@@ -6,22 +6,28 @@ import { AppModule } from "../../src/app.module";
 
 import { disconnect, Types } from "mongoose";
 import { CreateScheduleDto } from "../../src/schedule/dto/CreateSchedule.dto";
-import { SCHEDULE_NOT_FOUND } from "../../src/schedule/schedule.constants";
+import {
+	SCHEDULE_NOT_FOUND,
+	YOU_CANNOT_CHANGE_THIS_CHEDULE,
+} from "../../src/schedule/schedule.constants";
 import {
 	createRoom,
 	createSchedule,
 	deleteRoom,
 	deleteSchedule,
 	getAdminAccessToken,
+	getUserAccessToken,
 } from "../tools";
 import { INVALID_TOKEN } from "../../src/guards/guards.constants";
 
+const testsSchedulesDtos: CreateScheduleDto[] = [];
 const testScheduleDto: CreateScheduleDto = {
 	// Важно вызвать сначала метод создания комнаты и присвоить этот id
 	roomId: "",
 	reservedDay: new Date(),
 };
 let access_token_for_admin = "";
+let access_token_for_user = "";
 
 describe("/schedule/:roomId (PATCH)", () => {
 	let app: INestApplication<App>;
@@ -35,6 +41,7 @@ describe("/schedule/:roomId (PATCH)", () => {
 		await app.init();
 
 		access_token_for_admin = await getAdminAccessToken(app);
+		access_token_for_user = await getUserAccessToken(app);
 	});
 
 	it("success", async () => {
@@ -66,12 +73,27 @@ describe("/schedule/:roomId (PATCH)", () => {
 			});
 	});
 
-	it("incorrect id", () => {
+	it("incorrect room id", () => {
 		const randomRoomId = new Types.ObjectId().toHexString();
 		return request(app.getHttpServer())
 			.get(`/schedule/${randomRoomId}`)
 			.set("Authorization", `Bearer ${access_token_for_admin}`)
 			.expect(404, { statusCode: 404, message: SCHEDULE_NOT_FOUND });
+	});
+
+	it("incorreect email", async () => {
+		return request(app.getHttpServer())
+			.patch(`/schedule/${testScheduleDto.roomId}`)
+			.set("Authorization", `Bearer ${access_token_for_user}`)
+			.send({
+				...testScheduleDto,
+				reservedDay: new Date(2025, 1, 1),
+			})
+			.expect(400)
+			.then(({ body }: request.Response) => {
+				expect(body.message).toBe(YOU_CANNOT_CHANGE_THIS_CHEDULE);
+				return;
+			});
 	});
 
 	afterAll(async () => {

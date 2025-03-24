@@ -6,13 +6,17 @@ import { AppModule } from "../../src/app.module";
 
 import { disconnect, Types } from "mongoose";
 import { CreateScheduleDto } from "../../src/schedule/dto/CreateSchedule.dto";
-import { SCHEDULE_NOT_FOUND } from "../../src/schedule/schedule.constants";
+import {
+	SCHEDULE_NOT_FOUND,
+	YOU_CANNOT_CHANGE_THIS_CHEDULE,
+} from "../../src/schedule/schedule.constants";
 import {
 	createRoom,
 	createSchedule,
 	deleteRoom,
 	deleteSchedule,
 	getAdminAccessToken,
+	getUserAccessToken,
 } from "../tools";
 import { INVALID_TOKEN } from "../../src/guards/guards.constants";
 
@@ -22,6 +26,7 @@ const testScheduleDto: CreateScheduleDto = {
 	reservedDay: new Date(),
 };
 let access_token_for_admin = "";
+let access_token_for_user = "";
 
 describe("/schedule/:roomId (DELETE)", () => {
 	let app: INestApplication<App>;
@@ -35,6 +40,7 @@ describe("/schedule/:roomId (DELETE)", () => {
 		await app.init();
 
 		access_token_for_admin = await getAdminAccessToken(app);
+		access_token_for_user = await getUserAccessToken(app);
 	});
 
 	it("success", async () => {
@@ -64,6 +70,22 @@ describe("/schedule/:roomId (DELETE)", () => {
 			.delete(`/schedule/${randomRoomId}`)
 			.set("Authorization", `Bearer ${access_token_for_admin}`)
 			.expect(404, { statusCode: 404, message: SCHEDULE_NOT_FOUND });
+	});
+
+	it("incorrect email", async () => {
+		const createdRoomId = await createRoom(app);
+		await createSchedule(app, createdRoomId);
+
+		return request(app.getHttpServer())
+			.delete(`/schedule/${createdRoomId}`)
+			.set("Authorization", `Bearer ${access_token_for_user}`)
+			.expect(400)
+			.then(async ({ body }: request.Response) => {
+				expect(body.message).toBe(YOU_CANNOT_CHANGE_THIS_CHEDULE);
+				await deleteRoom(app, createdRoomId);
+				await deleteSchedule(app, createdRoomId);
+				return;
+			});
 	});
 
 	afterAll(async () => {
