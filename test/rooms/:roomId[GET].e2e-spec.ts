@@ -58,10 +58,16 @@ describe("/rooms/:roomId (GET)", () => {
 	it("without token", async () => {
 		return request(app.getHttpServer())
 			.get(`/rooms/${createdRoomId}`)
-			.expect(401)
+			.expect(200)
 			.then(({ body }: request.Response) => {
-				expect(body.message).toBe(INVALID_TOKEN);
-				return;
+				expect(body).toEqual(
+					expect.objectContaining({
+						_id: expect.any(String),
+						roomNumber: expect.any(Number),
+						sleepingPlacesCount: expect.any(Number),
+						isSeaView: expect.any(Boolean),
+					}),
+				);
 			});
 	});
 

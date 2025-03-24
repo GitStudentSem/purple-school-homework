@@ -10,3 +10,11 @@ export const IS_SEA_VIEW_MIST_BE_BOOLEAN =
 
 export const INVALID_SEA_VIEW =
 	"Вид на море должен быть указан как 'да' или 'нет'";
+
+export const INVALID_PAGE_FORMAT = "Параметр page должен быть числом";
+
+export const INVALID_LIMIT_FORMAT = "Параметр limit должен быть числом";
+
+export const INVALID_PAGE_VALUE = "Минимальное значение для page параметра 1";
+
+export const INVALID_LIMIT_VALUE = "Минимальное значение для limit параметра 1";

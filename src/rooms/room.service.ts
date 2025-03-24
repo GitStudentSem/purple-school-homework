@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { RoomDocument, Room } from "./room.model";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 import { CreateRoomDto } from "./dto/CreateRoom.dto";
 import { UpdateRoomDto } from "./dto/UpdateRoom.dto";
 import { ROOM_NOT_FOUND } from "./roomConstants";
+import { PaginationDto } from "./dto/Pagination.dto";
 
 @Injectable()
 export class RoomService {
@@ -22,8 +23,11 @@ export class RoomService {
 		return foundedRoom;
 	}
 
-	async getAll(): Promise<RoomDocument[] | null> {
-		return this.roomModel.find().exec();
+	async getAll(paginationDto: PaginationDto): Promise<RoomDocument[] | null> {
+		const { page = 1, limit = 10 } = paginationDto;
+		const skip = (page - 1) * limit;
+
+		return this.roomModel.find().skip(skip).limit(limit).exec();
 	}
 
 	async update(

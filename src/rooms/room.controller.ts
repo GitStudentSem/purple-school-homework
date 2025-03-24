@@ -4,8 +4,10 @@ import {
 	Delete,
 	Get,
 	Param,
+	ParseIntPipe,
 	Patch,
 	Post,
+	Query,
 	UseGuards,
 	UsePipes,
 	ValidationPipe,
@@ -18,20 +20,14 @@ import { Roles } from "../decorators/roles.decorator";
 import { RoleGuard } from "../guards/role.guard";
 import { IdValidationPipe } from "../pipes/id-validation.pipe";
 import { Role } from "../enums/roles";
+import { PaginationDto } from "./dto/Pagination.dto";
 
-/**
- * Ты про это говорил когда имел в виду что бы я поднял пайпы?
- *
- * Вроде работает, гард для ролей тоже тут ибо он для всех нужен как я понял
- *
- * Пока что не до конца понимаю полную концепцию приложения, как этими роутами будут пользоватся
- */
 @Controller("rooms")
-@UseGuards(JwtAuthGuard, RoleGuard)
 @UsePipes(new ValidationPipe())
 export class RoomsController {
 	constructor(private readonly roomService: RoomService) {}
 
+	@UseGuards(JwtAuthGuard, RoleGuard)
 	@Roles(Role.Admin)
 	@Post("create")
 	async createRoom(@Body() dto: CreateRoomDto) {
@@ -44,10 +40,11 @@ export class RoomsController {
 	}
 
 	@Get()
-	async getAll() {
-		return this.roomService.getAll();
+	async getAll(@Query() paginationDto: PaginationDto) {
+		return this.roomService.getAll(paginationDto);
 	}
 
+	@UseGuards(JwtAuthGuard, RoleGuard)
 	@Roles(Role.Admin)
 	@Patch("/:roomId")
 	async update(
@@ -57,6 +54,7 @@ export class RoomsController {
 		return this.roomService.update(roomId, dto);
 	}
 
+	@UseGuards(JwtAuthGuard, RoleGuard)
 	@Roles(Role.Admin)
 	@Delete(":roomId")
 	async delete(@Param("roomId", IdValidationPipe) roomId: string) {
