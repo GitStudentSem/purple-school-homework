@@ -3,17 +3,29 @@ import { InjectModel } from "@nestjs/mongoose";
 import { ScheduleDocument, Schedule } from "./schedule.model";
 import { Model } from "mongoose";
 import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
-import { ROOM_ALREADY_BOOKED, SCHEDULE_NOT_FOUND } from "./schedule.constants";
+import {
+	ROOM_ALREADY_BOOKED,
+	SCHEDULE_NOT_FOUND,
+	YOU_CANNOT_CHANGE_THIS_CHEDULE,
+} from "./schedule.constants";
 import { PaginationDto } from "./dto/Pagination.dto";
+import { User, UserDocument } from "../users/users.model";
+import { AccessTokenPayloadDto } from "../auth/dto/access_token.payload.dto";
+import { Role } from "../enums/roles";
 
 @Injectable()
 export class ScheduleService {
 	constructor(
 		@InjectModel(Schedule.name)
 		private scheduleModel: Model<ScheduleDocument>,
+		@InjectModel(User.name)
+		private userModel: Model<UserDocument>,
 	) {}
 
-	async create(dto: CreateScheduleDto): Promise<ScheduleDocument> {
+	async create(
+		email: string,
+		dto: CreateScheduleDto,
+	): Promise<ScheduleDocument> {
 		const isReservedOnThatDay = await this.scheduleModel
 			.findOne({ reservedDay: dto.reservedDay })
 			.exec();
@@ -22,7 +34,13 @@ export class ScheduleService {
 			throw new HttpException(ROOM_ALREADY_BOOKED, HttpStatus.CONFLICT);
 		}
 
-		return this.scheduleModel.create(dto);
+		/**
+		 * Что бы понять что эта запись именного того же пользователя
+		 * Нужно записать информацию о пользователе в данном случае
+		 * Я могу записать email как ссылку на юзера ибо он все равно уникальный
+		 */
+
+		return this.scheduleModel.create({ ...dto, email });
 	}
 
 	async getById(roomId: string): Promise<ScheduleDocument | null> {
@@ -67,11 +85,22 @@ export class ScheduleService {
 			.sort({ count: -1 });
 	}
 
-	async update(roomId: string, date: Date): Promise<ScheduleDocument | null> {
+	async update(
+		user: AccessTokenPayloadDto,
+		roomId: string,
+		date: Date,
+	): Promise<ScheduleDocument | null> {
 		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
 
 		if (!foundedSchedule) {
 			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+
+		if (foundedSchedule.email !== user.email && user.role !== Role.Admin) {
+			throw new HttpException(
+				YOU_CANNOT_CHANGE_THIS_CHEDULE,
+				HttpStatus.BAD_REQUEST,
+			);
 		}
 
 		return this.scheduleModel
@@ -79,11 +108,23 @@ export class ScheduleService {
 			.exec();
 	}
 
-	async delete(roomId: string): Promise<ScheduleDocument | null> {
+	async delete(
+		user: AccessTokenPayloadDto,
+		roomId: string,
+	): Promise<ScheduleDocument | null> {
 		const foundedSchedule = await this.scheduleModel.findOne({ roomId }).exec();
+
 		if (!foundedSchedule) {
 			throw new HttpException(SCHEDULE_NOT_FOUND, HttpStatus.NOT_FOUND);
 		}
+
+		if (foundedSchedule.email !== user.email && user.role !== Role.Admin) {
+			throw new HttpException(
+				YOU_CANNOT_CHANGE_THIS_CHEDULE,
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+
 		return this.scheduleModel.findByIdAndDelete(foundedSchedule._id).exec();
 	}
 }

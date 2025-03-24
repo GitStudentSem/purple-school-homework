@@ -11,6 +11,9 @@ export class Schedule {
 
 	@Prop()
 	reservedDay: Date;
+
+	@Prop()
+	email: string;
 }
 
 export const ScheduleSchema = SchemaFactory.createForClass(Schedule);

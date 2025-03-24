@@ -9,6 +9,7 @@ import {
 	Patch,
 	Post,
 	Query,
+	Req,
 	UseGuards,
 	UsePipes,
 	ValidationPipe,
@@ -23,6 +24,7 @@ import { RoleGuard } from "../guards/role.guard";
 import { Roles } from "../decorators/roles.decorator";
 import { Role } from "../enums/roles";
 import { PaginationDto } from "./dto/Pagination.dto";
+import { AccessTokenPayloadDto } from "../auth/dto/access_token.payload.dto";
 
 @UseGuards(JwtAuthGuard)
 @UsePipes(new ValidationPipe())
@@ -31,8 +33,20 @@ export class ScheduleController {
 	constructor(private readonly scheduleService: ScheduleService) {}
 
 	@Post("create")
-	async create(@Body() dto: CreateScheduleDto) {
-		return this.scheduleService.create(dto);
+	async create(@Body() dto: CreateScheduleDto, @Req() req: Request) {
+		/**
+		 * TS ругается на то что в req нет поля user
+		 * Это понятно, но как это пофиксить?
+		 * Пробовал создавать папку types/express.d.ts где указывал
+		 * декларацию модуля расшряя его на этот объект
+		 * но это не помогло, хотя в ванильном экспрессе я так делал раньше
+		 * Либо я что-то упустил, либо в несте это решается иначе
+		 *
+		 */
+		//@ts-ignore
+		const { email } = req.user;
+
+		return this.scheduleService.create(email, dto);
 	}
 
 	@Get("/:roomId")
@@ -66,12 +80,21 @@ export class ScheduleController {
 	async update(
 		@Param("roomId", IdValidationPipe) roomId: string,
 		@Body() date: Date,
+		@Req() req: Request,
 	) {
-		return this.scheduleService.update(roomId, date);
+		//@ts-ignore
+		const user: AccessTokenPayloadDto = req.user;
+
+		return this.scheduleService.update(user, roomId, date);
 	}
 
 	@Delete(":roomId")
-	async delete(@Param("roomId", IdValidationPipe) roomId: string) {
-		return this.scheduleService.delete(roomId);
+	async delete(
+		@Param("roomId", IdValidationPipe) roomId: string,
+		@Req() req: Request,
+	) {
+		//@ts-ignore
+		const user: AccessTokenPayloadDto = req.user;
+		return this.scheduleService.delete(user, roomId);
 	}
 }
