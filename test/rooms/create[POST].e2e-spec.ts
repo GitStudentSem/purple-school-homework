@@ -30,7 +30,7 @@ let access_token_for_user = "";
 describe("/rooms/create (POST)", () => {
 	let app: INestApplication<App>;
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		/**
 		 * Имеет ли смысл переписать это на beforeAll что бы ускорить тесты?
 		 *

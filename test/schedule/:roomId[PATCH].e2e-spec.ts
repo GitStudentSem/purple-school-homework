@@ -26,7 +26,7 @@ let access_token_for_admin = "";
 describe("/schedule/:roomId (PATCH)", () => {
 	let app: INestApplication<App>;
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
 			imports: [AppModule],
 		}).compile();

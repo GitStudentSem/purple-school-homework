@@ -24,7 +24,7 @@ let access_token_for_user = "";
 describe("/rooms/:roomId (GET)", () => {
 	let app: INestApplication<App>;
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
 			imports: [AppModule],
 		}).compile();

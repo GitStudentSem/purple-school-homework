@@ -26,7 +26,7 @@ describe("/rooms/:roomId (DELETE)", () => {
 	let app: INestApplication<App>;
 	let createdRoomId = "";
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
 			imports: [AppModule],
 		}).compile();

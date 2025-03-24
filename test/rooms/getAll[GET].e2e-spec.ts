@@ -20,7 +20,7 @@ const createdRoomsIds: string[] = [];
 describe("/ (GET)", () => {
 	let app: INestApplication<App>;
 
-	beforeEach(async () => {
+	beforeAll(async () => {
 		const moduleFixture: TestingModule = await Test.createTestingModule({
 			imports: [AppModule],
 		}).compile();
