@@ -31,11 +31,6 @@ describe("/rooms/create (POST)", () => {
 	let app: INestApplication<App>;
 
 	beforeAll(async () => {
-		/**
-		 * Имеет ли смысл переписать это на beforeAll что бы ускорить тесты?
-		 *
-		 * Помоему нет прям сильной необходимости каждый раз заново инициализировать приложение и логинится
-		 */
 		const moduleFixture: TestingModule = await Test.createTestingModule({
 			imports: [AppModule],
 		}).compile();

@@ -67,24 +67,14 @@ export class UsersService {
 			{ email: dto.email },
 			{ $set: { role: dto.role } },
 		);
-
-		/**
-		 * Тут не ясно че лучше вернуть
-		 * Можно вернуть 204 как успех
-		 * Можно вернуть новые данные юзера {email, role}
-		 * Но тогда нужно проверить что документ все же был обновлен
-		 *
-		 * А если нет, то видимо выбрасывать ошибку я хз
-		 *
-		 * Пока что оставлю воид и 204
-		 */
 	}
 
-	async deleteUser(email: string): Promise<void> {
+	async deleteUser(email: string): Promise<{ isUpdated: boolean }> {
 		const { deletedCount } = await this.userModel.deleteOne({ email }).exec();
 
 		if (deletedCount === 0) {
 			throw new UnauthorizedException(USER_NOT_FOUND_ERROR);
 		}
+		return { isUpdated: true };
 	}
 }
