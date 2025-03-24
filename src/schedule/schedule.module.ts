@@ -3,7 +3,6 @@ import { ScheduleService } from "./schedule.service";
 import { ScheduleController } from "./schedule.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Schedule, ScheduleSchema } from "./schedule.model";
-import { User, UserSchema } from "src/users/users.model";
 
 @Module({
 	providers: [ScheduleService],
@@ -13,10 +12,6 @@ import { User, UserSchema } from "src/users/users.model";
 			{
 				name: Schedule.name,
 				schema: ScheduleSchema,
-			},
-			{
-				name: User.name,
-				schema: UserSchema,
 			},
 		]),
 	],

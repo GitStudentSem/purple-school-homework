@@ -9,7 +9,6 @@ import {
 	YOU_CANNOT_CHANGE_THIS_CHEDULE,
 } from "./schedule.constants";
 import { PaginationDto } from "./dto/Pagination.dto";
-import { User, UserDocument } from "../users/users.model";
 import { AccessTokenPayloadDto } from "../auth/dto/access_token.payload.dto";
 import { Role } from "../enums/roles";
 
@@ -18,8 +17,6 @@ export class ScheduleService {
 	constructor(
 		@InjectModel(Schedule.name)
 		private scheduleModel: Model<ScheduleDocument>,
-		@InjectModel(User.name)
-		private userModel: Model<UserDocument>,
 	) {}
 
 	async create(
