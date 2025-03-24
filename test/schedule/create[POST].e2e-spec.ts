@@ -9,6 +9,7 @@ import { CreateScheduleDto } from "../../src/schedule/dto/CreateSchedule.dto";
 import {
 	INCORRECT_DATE,
 	INCORRECT_ROOM_ID,
+	ROOM_ALREADY_BOOKED,
 } from "../../src/schedule/schedule.constants";
 
 import {
@@ -51,6 +52,18 @@ describe("/schedule/create (POST)", () => {
 			.expect(201)
 			.then(({ body }: request.Response) => {
 				expect(body._id).toBeDefined();
+				return;
+			});
+	});
+
+	it("already reserved on that day", async () => {
+		return request(app.getHttpServer())
+			.post("/schedule/create")
+			.set("Authorization", `Bearer ${access_token_for_admin}`)
+			.send(testScheduleDto)
+			.expect(409)
+			.then(({ body }: request.Response) => {
+				expect(body.message).toBe(ROOM_ALREADY_BOOKED);
 				return;
 			});
 	});

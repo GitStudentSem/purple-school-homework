@@ -3,7 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { ScheduleDocument, Schedule } from "./schedule.model";
 import { Model } from "mongoose";
 import { CreateScheduleDto } from "./dto/CreateSchedule.dto";
-import { SCHEDULE_NOT_FOUND } from "./schedule.constants";
+import { ROOM_ALREADY_BOOKED, SCHEDULE_NOT_FOUND } from "./schedule.constants";
 import { PaginationDto } from "./dto/Pagination.dto";
 
 @Injectable()
@@ -14,6 +14,14 @@ export class ScheduleService {
 	) {}
 
 	async create(dto: CreateScheduleDto): Promise<ScheduleDocument> {
+		const isReservedOnThatDay = await this.scheduleModel
+			.findOne({ reservedDay: dto.reservedDay })
+			.exec();
+
+		if (isReservedOnThatDay) {
+			throw new HttpException(ROOM_ALREADY_BOOKED, HttpStatus.CONFLICT);
+		}
+
 		return this.scheduleModel.create(dto);
 	}
 
