@@ -15,6 +15,19 @@ export class RoomService {
 		return this.roomModel.create(dto);
 	}
 
+	async addPhotos(roomId: string, photos: string[]) {
+		const foundedRoom = await this.roomModel.findOne({ _id: roomId }).exec();
+		if (!foundedRoom) {
+			throw new HttpException(ROOM_NOT_FOUND, HttpStatus.NOT_FOUND);
+		}
+
+		const res = await this.roomModel
+			.updateOne({ _id: roomId }, { photos }, { new: true })
+			.exec();
+
+		return { photosAdded: res.modifiedCount !== 0 };
+	}
+
 	async getById(roomId: string): Promise<RoomDocument | null> {
 		const foundedRoom = await this.roomModel.findOne({ _id: roomId }).exec();
 		if (!foundedRoom) {

@@ -34,6 +34,16 @@ export class RoomsController {
 		return this.roomService.create(dto);
 	}
 
+	@UseGuards(JwtAuthGuard, RoleGuard)
+	@Roles(Role.Admin)
+	@Post("/addPhotos/:roomId")
+	async addPhotos(
+		@Param("roomId", IdValidationPipe) roomId: string,
+		@Body() { photos }: { photos: string[] },
+	) {
+		return this.roomService.addPhotos(roomId, photos);
+	}
+
 	@Get("/:roomId")
 	async getById(@Param("roomId", IdValidationPipe) roomId: string) {
 		return this.roomService.getById(roomId);

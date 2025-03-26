@@ -13,6 +13,9 @@ export class Room {
 
 	@Prop()
 	isSeaView: boolean;
+
+	@Prop()
+	photos: string[];
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);
