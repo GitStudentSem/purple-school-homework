@@ -25,7 +25,11 @@ export class FilesService {
 		return res;
 	}
 
-	convertToWebP(file: Buffer): Promise<Buffer> {
+	resize(file: Buffer): Promise<Buffer> {
 		return sharp(file).resize(500, null).toBuffer();
+	}
+
+	convertToWebP(file: Buffer): Promise<Buffer> {
+		return sharp(file).resize(500, null).webp().toBuffer();
 	}
 }

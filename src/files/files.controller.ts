@@ -24,15 +24,20 @@ export class FilesController {
 	async uploadFile(
 		@UploadedFile() file: Express.Multer.File,
 	): Promise<FileElementResponse[]> {
-		const saveArray: MFile[] = [new MFile(file)];
+		const saveArray: MFile[] = [];
 
 		if (file.mimetype.includes("image")) {
-			const buffer = await this.filesService.convertToWebP(file.buffer);
+			const resizedBuffer = await this.filesService.resize(file.buffer);
+			const webPBuffer = await this.filesService.convertToWebP(file.buffer);
 
 			saveArray.push(
 				new MFile({
 					originalname: file.originalname,
-					buffer,
+					buffer: resizedBuffer,
+				}),
+				new MFile({
+					originalname: `${file.originalname.split(".")[0]}.webp`,
+					buffer: webPBuffer,
 				}),
 			);
 		}
