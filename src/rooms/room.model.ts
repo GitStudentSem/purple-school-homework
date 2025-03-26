@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Schema as MSchema } from "mongoose";
+import { FileElementResponse } from "src/files/dto/file-element.response";
 
 export type RoomDocument = HydratedDocument<Room>;
 
@@ -15,7 +16,7 @@ export class Room {
 	isSeaView: boolean;
 
 	@Prop()
-	photos: string[];
+	photos: FileElementResponse[];
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

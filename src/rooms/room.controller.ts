@@ -21,6 +21,7 @@ import { RoleGuard } from "../guards/role.guard";
 import { IdValidationPipe } from "../pipes/id-validation.pipe";
 import { Role } from "../enums/roles";
 import { PaginationDto } from "./dto/Pagination.dto";
+import { FileElementResponse } from "src/files/dto/file-element.response";
 
 @Controller("rooms")
 @UsePipes(new ValidationPipe())
@@ -39,7 +40,7 @@ export class RoomsController {
 	@Post("/addPhotos/:roomId")
 	async addPhotos(
 		@Param("roomId", IdValidationPipe) roomId: string,
-		@Body() { photos }: { photos: string[] },
+		@Body() { photos }: { photos: FileElementResponse[] },
 	) {
 		return this.roomService.addPhotos(roomId, photos);
 	}
